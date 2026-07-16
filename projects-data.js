@@ -20,8 +20,8 @@ var PROJECTS_DATA = {
     role: "Solo: architecture, design system, and development",
     duration: "In progress, shipped module by module",
     highlights: ["Two fully distinct role-based interfaces", "Real Philippine payroll math (SSS, PhilHealth, Pag-IBIG, tax)", "Zero dependencies beyond Chart.js", "Deployed as a static site, no backend required"],
-    liveUrl: "https://jeoffnocaps.github.io/JERSA-ERP/",
-    sourceUrl: "https://github.com/jeoffnocaps/JERSA-ERP"
+    liveUrl: "https://jeofff.github.io/JersaERP/",
+    sourceUrl: "https://github.com/Jeofff/JersaERP"
   },
 
   "ib": {
