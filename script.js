@@ -67,7 +67,7 @@
 
   /* Reveal-on-scroll for content rows */
   var revealTargets = document.querySelectorAll(
-    ".spec-row, .work-row, .phase, .record-row, .toolkit-col, .opening-copy, .contact-block"
+    ".spec-row, .work-feature, .work-card, .phase, .record-row, .toolkit-col, .opening-copy, .contact-block"
   );
   revealTargets.forEach(function(el){ el.setAttribute("data-reveal", ""); });
 
@@ -84,5 +84,115 @@
     revealTargets.forEach(function(el){ reveal.observe(el); });
   } else {
     revealTargets.forEach(function(el){ el.classList.add("is-visible"); });
+  }
+
+  /* Case study modal (Work section) */
+  var csTriggers = Array.prototype.slice.call(document.querySelectorAll("[data-project]"));
+  var csOverlay = document.getElementById("csModalOverlay");
+
+  if (csTriggers.length && csOverlay && typeof PROJECTS_DATA !== "undefined"){
+    var csModal = document.getElementById("csModal");
+    var csClose = document.getElementById("csModalClose");
+    var csBadges = document.getElementById("csModalBadges");
+    var csTitle = document.getElementById("csModalTitle");
+    var csCategory = document.getElementById("csModalCategory");
+    var csBody = document.getElementById("csModalBody");
+    var csActions = document.getElementById("csModalActions");
+    var csLastFocused = null;
+
+    function csRow(label, value){
+      if (!value) return "";
+      return '<div class="cs-row"><dt>' + label + '</dt><dd>' + value + '</dd></div>';
+    }
+
+    function csChipRow(label, chips, className){
+      if (!chips || !chips.length) return "";
+      var items = chips.map(function(c){ return '<span class="chip ' + className + '">' + c + '</span>'; }).join("");
+      return '<div class="cs-row"><dt>' + label + '</dt><dd><div class="cs-highlight-list">' + items + '</div></dd></div>';
+    }
+
+    function openCaseStudy(trigger){
+      var id = trigger.getAttribute("data-project");
+      var data = PROJECTS_DATA[id];
+      if (!data) return;
+
+      csLastFocused = trigger;
+
+      var badgeEls = trigger.querySelectorAll(".work-badge");
+      csBadges.innerHTML = Array.prototype.map.call(badgeEls, function(b){ return b.outerHTML; }).join("");
+
+      var titleEl = trigger.querySelector("h3");
+      csTitle.textContent = titleEl ? titleEl.textContent : "";
+
+      var categoryEl = trigger.querySelector(".work-category");
+      csCategory.textContent = categoryEl ? categoryEl.textContent : "";
+
+      var stackEls = trigger.querySelectorAll(".chip-stack");
+      var stackList = Array.prototype.map.call(stackEls, function(c){ return c.textContent; });
+
+      csBody.innerHTML =
+        csRow("Overview", data.overview) +
+        csRow("Challenge", data.challenge) +
+        csRow("Solution", data.solution) +
+        csChipRow("Technology", stackList, "chip-stack") +
+        csRow("Role", data.role) +
+        csRow("Duration", data.duration) +
+        csChipRow("Highlights", data.highlights, "chip-result");
+
+      var actions = "";
+      if (data.liveUrl){
+        actions += '<a class="btn btn-accent" href="' + data.liveUrl + '" target="_blank" rel="noopener">Visit website</a>';
+      }
+      if (data.sourceUrl){
+        actions += '<a class="btn btn-ghost" href="' + data.sourceUrl + '" target="_blank" rel="noopener">View source</a>';
+      }
+      actions += '<button class="btn btn-ghost" type="button" data-cs-dismiss>Close</button>';
+      csActions.innerHTML = actions;
+
+      csOverlay.hidden = false;
+      requestAnimationFrame(function(){ csOverlay.classList.add("is-open"); });
+      document.body.style.overflow = "hidden";
+      csClose.focus();
+
+      document.addEventListener("keydown", onCsKeydown);
+    }
+
+    function closeCaseStudy(){
+      csOverlay.classList.remove("is-open");
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onCsKeydown);
+      window.setTimeout(function(){ csOverlay.hidden = true; }, 250);
+      if (csLastFocused) csLastFocused.focus();
+    }
+
+    function onCsKeydown(e){
+      if (e.key === "Escape"){
+        closeCaseStudy();
+        return;
+      }
+      if (e.key === "Tab"){
+        var focusable = csModal.querySelectorAll('a[href], button:not([disabled])');
+        if (!focusable.length) return;
+        var first = focusable[0];
+        var last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first){
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last){
+          e.preventDefault(); first.focus();
+        }
+      }
+    }
+
+    csTriggers.forEach(function(trigger){
+      trigger.addEventListener("click", function(){ openCaseStudy(trigger); });
+    });
+
+    csClose.addEventListener("click", closeCaseStudy);
+    csOverlay.addEventListener("click", function(e){
+      if (e.target === csOverlay) closeCaseStudy();
+    });
+    csActions.addEventListener("click", function(e){
+      if (e.target.hasAttribute("data-cs-dismiss")) closeCaseStudy();
+    });
   }
 })();
