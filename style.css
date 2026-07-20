@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Jeoffrey Sherren Sarmiento, Portfolio
-   Design system: "Working Drawings", an editorial dossier styled after a
+   Jeoffrey Sherren Sarmiento — Portfolio
+   Design system: "Working Drawings" — an editorial dossier styled after a
    technical drawing set. No logo; identity carried by typography, the
    index rail, and a recurring title-block motif.
    ========================================================================== */
@@ -121,16 +121,21 @@ main{ padding-left: 0; }
   position: fixed; top:0; left:0; right:0; z-index: 100;
   height: var(--topbar-h);
   display:flex; align-items:center;
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s var(--ease);
+}
+.topbar::before{
+  content: "";
+  position: absolute; inset: 0;
   background: rgba(16,18,20,.7);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid transparent;
-  transition: border-color .3s var(--ease), background .3s var(--ease);
+  transition: background .3s var(--ease);
+  z-index: -1;
 }
-.topbar.is-scrolled{
-  border-bottom-color: var(--border);
-  background: rgba(16,18,20,.92);
-}
+.topbar.is-scrolled{ border-bottom-color: var(--border); }
+.topbar.is-scrolled::before{ background: rgba(16,18,20,.92); }
 .topbar-inner{
+  position: relative;
   width:100%;
   display:flex; align-items:center; justify-content:space-between; gap:24px;
 }
@@ -167,6 +172,7 @@ main{ padding-left: 0; }
 @media (max-width: 899px){
   .site-nav{
     position: fixed; inset: var(--topbar-h) 0 0 0;
+    z-index: 90;
     background: var(--bg);
     flex-direction: column;
     padding: 32px;
