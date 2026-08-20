@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jeoffrey Sherren Sarmiento, Full-Stack Web Developer</title>
-<meta name="description" content="Jeoffrey Sherren Sarmiento is a full-stack web developer in the Philippines building responsive websites, PHP/MySQL systems, and interfaces for healthcare, wellness, and e-commerce clients.">
-<meta name="theme-color" content="#101214">
+<title>Jeoffrey Sherren Sarmiento &mdash; Software Developer, Philippines</title>
+<meta name="description" content="Jeoffrey Sherren Sarmiento builds client-facing systems in Flutter and Supabase for real businesses: a veterinary clinic platform, an ERP with real Philippine payroll compliance, e-commerce rebuilds, and healthcare booking sites.">
+<meta name="theme-color" content="#EDEFE5">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Jeoffrey Sherren Sarmiento, Full-Stack Web Developer">
-<meta property="og:description" content="Websites and systems that still make sense a year after launch.">
+<meta property="og:title" content="Jeoffrey Sherren Sarmiento &mdash; Software Developer, Philippines">
+<meta property="og:description" content="Client-facing systems in Flutter and Supabase, built for businesses that need them to actually work.">
 <meta property="og:image" content="./assets/jeoffrey.png">
 
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./style.css">
 
 <script type="application/ld+json">
@@ -23,12 +23,12 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Jeoffrey Sherren Sarmiento",
-  "jobTitle": "Full-Stack Web Developer",
+  "jobTitle": "Software Developer",
   "url": "https://jeoffnocaps.github.io/jsrs/",
   "email": "mailto:Jeoffreysherren01@gmail.com",
   "telephone": "+63-924-579-4150",
   "address": { "@type": "PostalAddress", "addressCountry": "PH" },
-  "knowsAbout": ["HTML", "CSS", "JavaScript", "PHP", "MySQL", "WordPress", "Webflow", "Shopify", "UI/UX Design", "SEO"],
+  "knowsAbout": ["Flutter", "Supabase", "Dart", "HTML", "CSS", "JavaScript", "PHP", "MySQL", "Payroll Compliance", "SSS", "PhilHealth", "Pag-IBIG"],
   "sameAs": []
 }
 </script>
@@ -40,16 +40,14 @@
 <header class="topbar" id="topbar">
   <div class="topbar-inner wrap">
     <a class="mark" href="#opening" aria-label="Back to top">
-      <span class="mark-initials">J·S</span>
-      <span class="mark-sheet" id="sheetLabel">Sheet 01/07: Opening</span>
+      <span class="mark-initials">J&middot;S</span>
     </a>
 
     <nav class="site-nav" id="siteNav" aria-label="Section navigation">
-      <a href="#capability" data-nav>Capability</a>
       <a href="#work" data-nav>Work</a>
-      <a href="#process" data-nav>Process</a>
+      <a href="#calculator" data-nav>Payroll math</a>
+      <a href="#capability" data-nav>Capability</a>
       <a href="#record" data-nav>Record</a>
-      <a href="#toolkit" data-nav>Toolkit</a>
       <a href="#contact" data-nav>Contact</a>
     </nav>
 
@@ -62,137 +60,56 @@
   </div>
 </header>
 
-<aside class="rail" aria-hidden="true">
-  <ol class="rail-index" id="railIndex">
-    <li data-rail="opening" class="is-active"><span class="rail-tick"></span><span class="rail-label">Opening</span></li>
-    <li data-rail="capability"><span class="rail-tick"></span><span class="rail-label">Capability</span></li>
-    <li data-rail="work"><span class="rail-tick"></span><span class="rail-label">Work</span></li>
-    <li data-rail="process"><span class="rail-tick"></span><span class="rail-label">Process</span></li>
-    <li data-rail="record"><span class="rail-tick"></span><span class="rail-label">Record</span></li>
-    <li data-rail="toolkit"><span class="rail-tick"></span><span class="rail-label">Toolkit</span></li>
-    <li data-rail="contact"><span class="rail-tick"></span><span class="rail-label">Contact</span></li>
-  </ol>
-</aside>
-
 <main>
 
 <!-- ================= OPENING ================= -->
-<section class="section opening" id="opening" data-sheet="01" data-label="Opening">
+<section class="section opening" id="opening">
   <div class="wrap opening-grid">
     <div class="opening-copy">
-      <p class="locator">Full-stack development &middot;</p>
-      <h1 class="opening-head">Websites and systems that still make sense a year after launch.</h1>
-      <p class="opening-lead">I'm Jeoffrey Sherren Sarmiento. I build responsive websites, admin systems, and interfaces for healthcare, wellness, and e-commerce clients who need something that holds up under real use, not just a first impression.</p>
+      <p class="locator">Software developer &middot; Philippines</p>
+      <h1 class="opening-head">I build the systems a business actually runs on, not a demo of one.</h1>
+      <p class="opening-lead">Flutter and Supabase, mostly: a veterinary clinic platform with real medical records and billing, an ERP with payroll math that matches SSS, PhilHealth, and Pag-IBIG down to the peso, e-commerce and booking sites for clients who needed something that still works a year after launch.</p>
       <div class="opening-actions">
         <a class="btn btn-accent" href="#work">See the work</a>
         <a class="btn btn-ghost" href="./assets/JSarmiento_RESUME.pdf" target="_blank" rel="noopener">Open resume</a>
       </div>
     </div>
-    <div class="opening-figure" aria-hidden="true">
-      <svg class="elevation" viewBox="0 0 480 560" xmlns="http://www.w3.org/2000/svg">
-        <g class="elevation-lines">
-          <line x1="40" y1="500" x2="440" y2="500"></line>
-          <line x1="70" y1="500" x2="70" y2="120"></line>
-          <line x1="150" y1="500" x2="150" y2="200"></line>
-          <line x1="230" y1="500" x2="230" y2="60"></line>
-          <line x1="310" y1="500" x2="310" y2="240"></line>
-          <line x1="390" y1="500" x2="390" y2="160"></line>
-          <rect x="55" y="120" width="30" height="380"></rect>
-          <rect x="135" y="200" width="30" height="300"></rect>
-          <rect x="215" y="60" width="30" height="440"></rect>
-          <rect x="295" y="240" width="30" height="260"></rect>
-          <rect x="375" y="160" width="30" height="340"></rect>
-          <line x1="20" y1="500" x2="20" y2="120" class="dim"></line>
-          <line x1="14" y1="120" x2="26" y2="120" class="dim"></line>
-          <line x1="14" y1="500" x2="26" y2="500" class="dim"></line>
-        </g>
-        <text x="20" y="530" class="elevation-label">SCALE 1 : 200</text>
-        <text x="20" y="546" class="elevation-label">ELEVATION A</text>
-      </svg>
-    </div>
-  </div>
-  <div class="proof-strip" role="note" aria-label="Recently shipped sites">
-    <div class="proof-track">
-      <span>INFINITEBEAUTYRAQUEL.COM</span><span>MERAKWELLNESSCENTER.COM</span><span>MFSOFVA.COM</span><span>LAVISHREJUVENATIONS.COM</span><span>SPIRASALESCORP.COM</span>
-      <span>INFINITEBEAUTYRAQUEL.COM</span><span>MERAKWELLNESSCENTER.COM</span><span>MFSOFVA.COM</span><span>LAVISHREJUVENATIONS.COM</span><span>SPIRASALESCORP.COM</span>
-    </div>
-  </div>
-</section>
-
-<!-- ================= CAPABILITY ================= -->
-<section class="section band" id="capability" data-sheet="02" data-label="Capability">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Capability</span>
-      <h2>Four kinds of work. Nothing stretched thin.</h2>
-      <p class="section-intro">I keep the range narrow on purpose. Everything below is something I've shipped and would put my name on.</p>
-    </div>
-
-    <div class="spec-list">
-      <article class="spec-row">
-        <span class="spec-mark">§01</span>
-        <div class="spec-body">
-          <h3>Website Development</h3>
-          <p>Landing pages, multi-page sites, and full business builds in HTML, CSS, JavaScript, PHP, or WordPress, depending on what the project actually needs.</p>
-        </div>
-        <div class="spec-tags">
-          <span>Landing Pages</span><span>Multi-page Sites</span><span>WordPress</span><span>Responsive</span>
-        </div>
-      </article>
-
-      <article class="spec-row">
-        <span class="spec-mark">§02</span>
-        <div class="spec-body">
-          <h3>Interface &amp; UX</h3>
-          <p>Layout and navigation work for sites that already exist but don't read clearly yet: better hierarchy, tighter spacing, and a version that makes sense on a phone first.</p>
-        </div>
-        <div class="spec-tags">
-          <span>Wireframes</span><span>Layout</span><span>Mobile-first</span><span>Usability</span>
-        </div>
-      </article>
-
-      <article class="spec-row">
-        <span class="spec-mark">§03</span>
-        <div class="spec-body">
-          <h3>Systems (PHP / MySQL)</h3>
-          <p>Database-backed tools: borrower records, inventory, admin panels, and reports that print correctly and don't fall over under real data.</p>
-        </div>
-        <div class="spec-tags">
-          <span>CRUD</span><span>Admin Panels</span><span>Reports</span><span>Auth</span>
-        </div>
-      </article>
-
-      <article class="spec-row">
-        <span class="spec-mark">§04</span>
-        <div class="spec-body">
-          <h3>Platform Builds</h3>
-          <p>Webflow, Shopify, and Wix builds for clients who want a fast, polished launch without a custom back end.</p>
-        </div>
-        <div class="spec-tags">
-          <span>Webflow</span><span>Shopify</span><span>Wix</span><span>GoHighLevel</span>
-        </div>
-      </article>
+    <div class="opening-proof" aria-label="Proof of work">
+      <a class="proof-card" href="https://jeofff.github.io/JersaERP/" target="_blank" rel="noopener">
+        <span class="proof-label">Live &middot; GitHub Pages</span>
+        <span class="proof-name">JERSA ERP</span>
+        <span class="proof-detail">HR, payroll, inventory, and POS in one system</span>
+      </a>
+      <div class="proof-card proof-card-static">
+        <span class="proof-label">In progress</span>
+        <span class="proof-name">PawCare Pro</span>
+        <span class="proof-detail">Full vet clinic platform, Flutter + Supabase</span>
+      </div>
+      <div class="proof-card proof-card-static">
+        <span class="proof-label">Shipped for clients</span>
+        <span class="proof-name">9 live sites</span>
+        <span class="proof-detail">E-commerce, healthcare, B2B, wellness</span>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ================= WORK ================= -->
-<section class="section" id="work" data-sheet="03" data-label="Work">
+<section class="section" id="work" data-section-label="Work">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Selected work</span>
-      <h2>From enterprise systems to client launches.</h2>
-      <p class="section-intro">Eleven projects, ordered by how much system sits behind the interface. Click any of them for the full case study before deciding whether to visit the live site.</p>
+      <h2>Systems first, client sites after.</h2>
+      <p class="section-intro">The two platform builds below are the deepest technical work. Everything after them is a client launch, ordered by how much system sits behind the interface.</p>
     </div>
 
-    <!-- Enterprise Software -->
     <div class="work-group">
-      <p class="work-group-label">Enterprise Software</p>
+      <p class="work-group-label">Platform builds</p>
 
       <button class="work-feature" type="button" data-project="jersa-erp" aria-haspopup="dialog">
         <div class="work-feature-media">
           <svg class="schematic" viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <text x="14" y="20" class="schematic-label">JERSA ERP - ADMIN CONSOLE</text>
+            <text x="14" y="20" class="schematic-label">JERSA ERP &mdash; ADMIN CONSOLE</text>
             <g class="schematic-lines">
               <rect x="10" y="34" width="460" height="250"></rect>
               <line x1="10" y1="70" x2="470" y2="70"></line>
@@ -216,21 +133,18 @@
               <polyline points="296,250 320,220 344,235 368,190 392,205 416,160 434,180" class="chart-line"></polyline>
             </g>
           </svg>
-          <span class="work-badge badge-featured">Featured</span>
-          <span class="work-badge badge-enterprise">Enterprise</span>
+          <span class="work-badge badge-featured">Live</span>
         </div>
         <div class="work-feature-body">
           <span class="work-category">Enterprise Software</span>
           <h3>JERSA ERP</h3>
-          <p class="work-summary">A full enterprise resource planning platform covering HR, payroll, inventory, and point-of-sale, built to show what a real operations team's software actually needs to do, not just look like. Two role-based dashboards, live in the browser, backed by nothing but LocalStorage.</p>
+          <p class="work-summary">HR, payroll, inventory, and point-of-sale for a fictional trading company, built to prove the difference between a portfolio dashboard and software that could actually run a business day to day. The payroll module computes real SSS, PhilHealth, and Pag-IBIG deductions, try it yourself below.</p>
 
           <div class="chip-row work-stats">
             <span class="chip chip-stat">2 Live Dashboards</span>
             <span class="chip chip-stat">Vanilla JavaScript</span>
+            <span class="chip chip-stat">Real PH Payroll Math</span>
             <span class="chip chip-stat">Zero Backend</span>
-            <span class="chip chip-stat">LocalStorage DB</span>
-            <span class="chip chip-stat">GitHub Pages</span>
-            <span class="chip chip-stat">Responsive</span>
           </div>
 
           <div class="chip-row chip-row-stack">
@@ -240,11 +154,53 @@
           <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </div>
       </button>
+
+      <button class="work-feature" type="button" data-project="pawcare-pro" aria-haspopup="dialog">
+        <div class="work-feature-media">
+          <svg class="schematic" viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <text x="14" y="20" class="schematic-label">PAWCARE PRO &mdash; PATIENT RECORD</text>
+            <g class="schematic-lines">
+              <rect x="10" y="34" width="460" height="250"></rect>
+              <line x1="180" y1="34" x2="180" y2="284"></line>
+              <rect x="20" y="50" width="140" height="90" class="accent-box"></rect>
+              <rect x="20" y="150" width="60" height="7" class="fillbar"></rect>
+              <rect x="20" y="168" width="140" height="7" class="fillbar"></rect>
+              <rect x="20" y="186" width="140" height="7" class="fillbar"></rect>
+              <rect x="20" y="204" width="100" height="7" class="fillbar"></rect>
+              <rect x="196" y="50" width="120" height="30" class="accent-box"></rect>
+              <rect x="196" y="90" width="120" height="30" class="accent-box"></rect>
+              <rect x="196" y="130" width="120" height="30" class="accent-box"></rect>
+              <rect x="332" y="50" width="120" height="110" class="accent-box"></rect>
+              <rect x="20" y="230" width="432" height="40" class="accent-box"></rect>
+              <polyline points="332,180 352,165 372,190 392,150 412,170 432,140 452,155" class="chart-line"></polyline>
+            </g>
+          </svg>
+          <span class="work-badge badge-featured">In progress</span>
+        </div>
+        <div class="work-feature-body">
+          <span class="work-category">Enterprise Software</span>
+          <h3>PawCare Pro</h3>
+          <p class="work-summary">A full clinic management platform for veterinary practices: medical records, real point-of-sale billing with store credit and split payments, confinement tracking, and a client portal, with role-based access enforced at the database level, not just hidden in the interface.</p>
+
+          <div class="chip-row work-stats">
+            <span class="chip chip-stat">Flutter + Supabase</span>
+            <span class="chip chip-stat">Role-Based Access</span>
+            <span class="chip chip-stat">Offline-First</span>
+            <span class="chip chip-stat">Automatic Audit Log</span>
+          </div>
+
+          <div class="chip-row chip-row-stack">
+            <span class="chip chip-stack">Flutter</span><span class="chip chip-stack">Dart</span><span class="chip chip-stack">Supabase</span><span class="chip chip-stack">PostgreSQL</span>
+          </div>
+
+          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
+        </div>
+      </button>
     </div>
 
     <!-- Client Projects -->
     <div class="work-group">
-      <p class="work-group-label">Client Projects</p>
+      <p class="work-group-label">Client projects</p>
 
       <div class="work-card-list">
 
@@ -258,153 +214,124 @@
             <h3>Infinite Beauty Raquel</h3>
             <span class="work-summary">Built to turn browsing into orders with a full product catalog, cart, and checkout for a beauty and self-care brand, instead of a static page that sends buyers elsewhere to order.</span>
             <span class="chip-row"><span class="chip chip-result">Conversion Focused</span><span class="chip chip-result">Responsive</span><span class="chip chip-result">Fast Loading</span><span class="chip chip-result">SEO Ready</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">HTML</span><span class="chip chip-stack">CSS</span><span class="chip chip-stack">JavaScript</span><span class="chip chip-stack">PHP</span><span class="chip chip-stack">MySQL</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
 
         <button class="work-card" type="button" data-project="spira" aria-haspopup="dialog">
           <span class="work-card-media">
-            <img src="./assets/Toto.png" alt="SPIRA Sales Corporation website screenshot" loading="lazy" width="800" height="399">
+            <img src="./assets/Toto.png" alt="SPIRA Sales Corporation website screenshot" loading="lazy" width="800" height="398">
             <span class="work-badge badge-client">Client Project</span>
           </span>
           <span class="work-card-body">
             <span class="work-category">Construction</span>
             <h3>SPIRA Sales Corporation</h3>
-            <span class="work-summary">A corporate catalog site for the Philippine distributor of TOTO bathroom fixtures, built for contractors and developers researching product specs, not casual browsers.</span>
-            <span class="chip-row"><span class="chip chip-result">Responsive</span><span class="chip chip-result">SEO Ready</span><span class="chip chip-result">Scalable</span><span class="chip chip-result">Modern UI</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">HTML</span><span class="chip chip-stack">CSS</span><span class="chip chip-stack">JavaScript</span><span class="chip chip-stack">PHP</span></span>
+            <span class="work-summary">A trade-buyer site for the Philippine distributor of TOTO bathroom fixtures, structured around how contractors actually evaluate a supplier: categories, specs, and a direct inquiry path.</span>
+            <span class="chip-row"><span class="chip chip-result">B2B Focused</span><span class="chip chip-result">Product Catalog</span><span class="chip chip-result">Inquiry-First</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
 
         <button class="work-card" type="button" data-project="merak" aria-haspopup="dialog">
           <span class="work-card-media">
-            <img src="./assets/merak-wellness.jpg" alt="Merak Wellness Center website screenshot" loading="lazy" width="800" height="402">
+            <img src="./assets/merak-wellness.jpg" alt="Merak Wellness Center website screenshot" loading="lazy" width="800" height="398">
             <span class="work-badge badge-client">Client Project</span>
           </span>
           <span class="work-card-body">
             <span class="work-category">Healthcare</span>
             <h3>Merak Wellness Center</h3>
-            <span class="work-summary">A brand site for a therapy and alternative healing practice, designed to feel calm and trustworthy rather than corporate. The brief was explicit about that.</span>
-            <span class="chip-row"><span class="chip chip-result">Responsive</span><span class="chip chip-result">Modern UI</span><span class="chip chip-result">Accessibility</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">WordPress</span><span class="chip chip-stack">Elementor</span><span class="chip chip-stack">CSS</span></span>
+            <span class="work-summary">A calm, trust-first site for a therapy and alternative healing practice, built to feel like the actual space rather than a generic clinical or overly decorative default.</span>
+            <span class="chip-row"><span class="chip chip-result">Trust-First Layout</span><span class="chip chip-result">Booking Path</span><span class="chip chip-result">Mobile-First</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
 
         <button class="work-card" type="button" data-project="mfs" aria-haspopup="dialog">
           <span class="work-card-media">
-            <img src="./assets/maternal.jpg" alt="Maternal Fetal Specialist website screenshot" loading="lazy" width="800" height="400">
+            <img src="./assets/maternal.jpg" alt="Maternal Fetal Specialist website screenshot" loading="lazy" width="800" height="398">
             <span class="work-badge badge-client">Client Project</span>
           </span>
           <span class="work-card-body">
             <span class="work-category">Healthcare</span>
             <h3>Maternal Fetal Specialist</h3>
-            <span class="work-summary">A healthcare site for a maternal-fetal medicine practice, organizing dense clinical content so a worried parent can actually find what they need.</span>
-            <span class="chip-row"><span class="chip chip-result">SEO Ready</span><span class="chip chip-result">Accessibility</span><span class="chip chip-result">Performance Optimized</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">WordPress</span><span class="chip chip-stack">Elementor</span></span>
+            <span class="work-summary">Dense clinical content for a maternal-fetal medicine practice, organized so an anxious parent can find what they need in two clicks, without simplifying anything away.</span>
+            <span class="chip-row"><span class="chip chip-result">Clear Hierarchy</span><span class="chip chip-result">Accessible</span><span class="chip chip-result">Scannable</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
 
         <button class="work-card" type="button" data-project="brightsmile" aria-haspopup="dialog">
           <span class="work-card-media">
-            <img src="./assets/BrightSmile.png" alt="BrightSmile Dental website screenshot" loading="lazy" width="800" height="399">
+            <img src="./assets/BrightSmile.png" alt="BrightSmile Dental website screenshot" loading="lazy" width="800" height="398">
             <span class="work-badge badge-client">Client Project</span>
           </span>
           <span class="work-card-body">
             <span class="work-category">Healthcare</span>
             <h3>BrightSmile Dental</h3>
-            <span class="work-summary">A Webflow build for a dental practice, structured around getting visitors to book an appointment rather than just read about services.</span>
-            <span class="chip-row"><span class="chip chip-result">Conversion Focused</span><span class="chip chip-result">Responsive</span><span class="chip chip-result">Modern UI</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">Webflow</span></span>
+            <span class="work-summary">A Webflow build structured around one primary action, booking an appointment, with service information supporting that goal instead of competing with it.</span>
+            <span class="chip-row"><span class="chip chip-result">Booking-First</span><span class="chip chip-result">Webflow</span><span class="chip chip-result">Mobile-Optimized</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
 
         <button class="work-card" type="button" data-project="coachkai" aria-haspopup="dialog">
           <span class="work-card-media">
-            <img src="./assets/CoachKai.png" alt="CoachKai Fitness website screenshot" loading="lazy" width="800" height="399">
+            <img src="./assets/CoachKai.png" alt="CoachKai Fitness website screenshot" loading="lazy" width="800" height="398">
             <span class="work-badge badge-client">Client Project</span>
           </span>
           <span class="work-card-body">
             <span class="work-category">Professional Services</span>
             <h3>CoachKai Fitness</h3>
-            <span class="work-summary">A Webflow build for a fitness coaching brand that needed a louder, higher-energy presence than a typical service site. The brief called for it directly.</span>
-            <span class="chip-row"><span class="chip chip-result">Conversion Focused</span><span class="chip chip-result">Modern UI</span><span class="chip chip-result">Fast Loading</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">Webflow</span></span>
+            <span class="work-summary">A higher-energy Webflow build for a fitness coaching brand that explicitly needed more personality than a typical service site, without losing a clear path to booking.</span>
+            <span class="chip-row"><span class="chip chip-result">High-Energy Direction</span><span class="chip chip-result">Webflow</span><span class="chip chip-result">Clear CTA Paths</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
 
         <button class="work-card" type="button" data-project="lavish" aria-haspopup="dialog">
           <span class="work-card-media">
-            <img src="./assets/lr.jpg" alt="Lavish Rejuvenations website screenshot" loading="lazy" width="800" height="402">
+            <img src="./assets/lr.jpg" alt="Lavish Rejuvenations website screenshot" loading="lazy" width="800" height="398">
             <span class="work-badge badge-client">Client Project</span>
           </span>
           <span class="work-card-body">
             <span class="work-category">Healthcare</span>
             <h3>Lavish Rejuvenations</h3>
-            <span class="work-summary">A landing page for a skincare and body-contouring clinic, built to explain several treatment services quickly and get the inquiry form seen.</span>
-            <span class="chip-row"><span class="chip chip-result">Fast Loading</span><span class="chip chip-result">Conversion Focused</span><span class="chip chip-result">Responsive</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">HTML</span><span class="chip chip-stack">CSS</span><span class="chip chip-stack">JavaScript</span></span>
+            <span class="work-summary">A landing page for a skincare and body-contouring clinic, built to explain several distinct treatments quickly without overwhelming a first-time visitor.</span>
+            <span class="chip-row"><span class="chip chip-result">Single-Page</span><span class="chip chip-result">Trust-Focused</span><span class="chip chip-result">Fast-Loading</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
-
-      </div>
-    </div>
-
-    <!-- Portfolio & Experiments -->
-    <div class="work-group">
-      <p class="work-group-label">Portfolio &amp; Experiments</p>
-
-      <div class="work-card-list">
 
         <button class="work-card" type="button" data-project="sparkclean" aria-haspopup="dialog">
           <span class="work-card-media">
-            <img src="./assets/SparksClean.png" alt="SparkClean website screenshot" loading="lazy" width="800" height="399">
-            <span class="work-badge badge-live">Live Project</span>
+            <img src="./assets/SparksClean.png" alt="SparkClean website screenshot" loading="lazy" width="800" height="398">
+            <span class="work-badge badge-client">Client Project</span>
           </span>
           <span class="work-card-body">
             <span class="work-category">Professional Services</span>
             <h3>SparkClean</h3>
-            <span class="work-summary">A static demo built to test a booking-first layout for a cleaning service before the client committed to a full build.</span>
-            <span class="chip-row"><span class="chip chip-result">Fast Loading</span><span class="chip chip-result">Responsive</span><span class="chip chip-result">Conversion Focused</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">HTML</span><span class="chip chip-stack">CSS</span><span class="chip chip-stack">JavaScript</span></span>
+            <span class="work-summary">A static proof-of-concept demo for a cleaning service, built so the client could review a full booking-first layout before committing to a full build.</span>
+            <span class="chip-row"><span class="chip chip-result">Proof of Concept</span><span class="chip chip-result">Booking-First</span><span class="chip chip-result">Static Demo</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
 
         <button class="work-card" type="button" data-project="borrower-system" aria-haspopup="dialog">
           <span class="work-card-media">
-            <img src="./assets/borrower-system.jpg" alt="Automated Borrower's Equipment Application screenshot" loading="lazy" width="800" height="378">
-            <span class="work-badge badge-case-study">Case Study</span>
+            <img src="./assets/borrower-system.jpg" alt="Automated Borrower's Equipment Application screenshot" loading="lazy" width="800" height="398">
+            <span class="work-badge badge-client">Internship</span>
           </span>
           <span class="work-card-body">
             <span class="work-category">Education</span>
             <h3>Automated Borrower's Equipment Application</h3>
-            <span class="work-summary">Built during my internship to replace manual equipment logs, covering borrowing, inventory monitoring, overdue tracking, and printable slips the lab staff could rely on.</span>
-            <span class="chip-row"><span class="chip chip-result">Admin Panel</span><span class="chip chip-result">Scalable</span><span class="chip chip-result">Performance Optimized</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">PHP</span><span class="chip chip-stack">MySQL</span></span>
+            <span class="work-summary">A PHP and MySQL system built during my internship at T.I.P. ITSO, replacing paper equipment-lending logs with automatic overdue tracking and printable borrower slips.</span>
+            <span class="chip-row"><span class="chip chip-result">Inventory Tracking</span><span class="chip chip-result">Overdue Alerts</span><span class="chip chip-result">PHP / MySQL</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
 
         <button class="work-card" type="button" data-project="pottery-capstone" aria-haspopup="dialog">
           <span class="work-card-media">
-            <img src="./assets/pia-capstone.jpg" alt="Pottery Immersive Atelier screenshot" loading="lazy" width="800" height="404">
-            <span class="work-badge badge-case-study">Case Study</span>
+            <img src="./assets/pia-capstone.jpg" alt="Pottery Immersive Atelier VR screenshot" loading="lazy" width="800" height="398">
+            <span class="work-badge badge-client">Capstone</span>
           </span>
           <span class="work-card-body">
             <span class="work-category">Education</span>
             <h3>Pottery Immersive Atelier</h3>
-            <span class="work-summary">A VR pottery education game built in Unity for my capstone, covering carving, painting, and kiln stages, with a tutorial mode, a quest mode, and a grading system behind it.</span>
-            <span class="chip-row"><span class="chip chip-result">Modern UI</span><span class="chip chip-result">Scalable</span></span>
-            <span class="chip-row chip-row-stack"><span class="chip chip-stack">Unity</span><span class="chip chip-stack">C#</span></span>
+            <span class="work-summary">A VR pottery education game built in Unity, with a tutorial mode, a quest mode, and a grading and feedback system so it could function as an actual teaching tool.</span>
+            <span class="chip-row"><span class="chip chip-result">Unity / VR</span><span class="chip chip-result">Grading System</span><span class="chip chip-result">Lead Developer</span></span>
           </span>
-          <span class="work-card-cta"><span class="cta-label">View case study</span><span class="cta-arrow">&#8594;</span></span>
         </button>
 
       </div>
@@ -412,49 +339,117 @@
   </div>
 </section>
 
+<!-- ================= CALCULATOR (signature element) ================= -->
+<section class="section calc-section" id="calculator" data-section-label="Payroll math">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">From the JERSA ERP payroll module</span>
+      <h2>The part most portfolio ERPs fake.</h2>
+      <p class="section-intro">SSS, PhilHealth, and Pag-IBIG contributions are public, tedious, and easy to get wrong. This is the actual 2026 bracket math from JERSA ERP's payroll module, running live, right here.</p>
+    </div>
+
+    <div class="calc-widget">
+      <div class="calc-input-block">
+        <label for="calcSalary">Monthly basic salary</label>
+        <div class="calc-input-wrap">
+          <span class="calc-peso-sign" aria-hidden="true">&#8369;</span>
+          <input type="text" inputmode="decimal" id="calcSalary" placeholder="25,000" aria-describedby="calcHint">
+        </div>
+        <div class="calc-presets">
+          <button type="button" data-preset-salary="15000">&#8369;15,000</button>
+          <button type="button" data-preset-salary="35000">&#8369;35,000</button>
+          <button type="button" data-preset-salary="75000">&#8369;75,000</button>
+        </div>
+        <p id="calcHint" class="calc-hint">Employee-side deductions only. Rates reflect the 2026 SSS, PhilHealth, Pag-IBIG, and BIR (TRAIN Law) schedules.</p>
+      </div>
+      <div class="calc-results" id="calcResults">
+        <p class="calc-empty">Enter a monthly salary to see the breakdown.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CAPABILITY ================= -->
+<section class="section band" id="capability" data-section-label="Capability">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Capability</span>
+      <h2>Four kinds of work. Nothing stretched thin.</h2>
+      <p class="section-intro">I keep the range narrow on purpose. Everything below is something I've shipped and would put my name on.</p>
+    </div>
+
+    <div class="spec-list">
+      <article class="spec-row">
+        <div class="spec-body">
+          <h3>Client-Facing Systems</h3>
+          <p>Flutter and Supabase apps for real operations: medical records, point-of-sale billing, inventory, role-based staff access, and offline-first data that keeps working without a connection.</p>
+        </div>
+        <div class="spec-tags">
+          <span>Flutter</span><span>Supabase</span><span>PostgreSQL</span><span>Offline-First</span>
+        </div>
+      </article>
+
+      <article class="spec-row">
+        <div class="spec-body">
+          <h3>Business Logic &amp; Compliance</h3>
+          <p>The math a business can't get wrong: Philippine payroll deductions, tax withholding, inventory reconciliation, and reporting that has to match government tables, not just look plausible.</p>
+        </div>
+        <div class="spec-tags">
+          <span>Payroll</span><span>SSS / PhilHealth / Pag-IBIG</span><span>Reporting</span>
+        </div>
+      </article>
+
+      <article class="spec-row">
+        <div class="spec-body">
+          <h3>Website Development</h3>
+          <p>Landing pages, multi-page sites, and full business builds in HTML, CSS, JavaScript, PHP, or WordPress, depending on what the project actually needs.</p>
+        </div>
+        <div class="spec-tags">
+          <span>Landing Pages</span><span>WordPress</span><span>Responsive</span>
+        </div>
+      </article>
+
+      <article class="spec-row">
+        <div class="spec-body">
+          <h3>Platform Builds</h3>
+          <p>Webflow, Shopify, and Wix builds for clients who want a fast, polished launch without a custom back end.</p>
+        </div>
+        <div class="spec-tags">
+          <span>Webflow</span><span>Shopify</span><span>GoHighLevel</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ================= PROCESS ================= -->
-<section class="section band" id="process" data-sheet="04" data-label="Process">
+<section class="section" id="process" data-section-label="Process">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Process</span>
       <h2>The same sequence, every time.</h2>
-      <p class="section-intro">Nine steps collapse into four phases below. The order doesn't change; only the project does.</p>
-    </div>
-
-    <div class="scale-bar" aria-hidden="true">
-      <svg viewBox="0 0 1200 24" preserveAspectRatio="none">
-        <line x1="0" y1="12" x2="1200" y2="12"></line>
-        <line x1="0" y1="2" x2="0" y2="22"></line>
-        <line x1="300" y1="4" x2="300" y2="20"></line>
-        <line x1="600" y1="4" x2="600" y2="20"></line>
-        <line x1="900" y1="4" x2="900" y2="20"></line>
-        <line x1="1200" y1="2" x2="1200" y2="22"></line>
-      </svg>
+      <p class="section-intro">Four phases, in this order, every project. Only the work inside each one changes.</p>
     </div>
 
     <div class="phase-grid">
       <article class="phase">
-        <span class="phase-index">01</span>
+        <span class="phase-tag">01 &middot; DISCOVER</span>
         <h3>Discover</h3>
-        <p class="phase-steps">Research &middot; Planning</p>
         <p>Understand the audience, the content, and the features that actually matter before any layout gets touched.</p>
       </article>
       <article class="phase">
-        <span class="phase-index">02</span>
+        <span class="phase-tag">02 &middot; DESIGN</span>
         <h3>Design</h3>
-        <p class="phase-steps">Wireframing &middot; UI Design</p>
         <p>Structure first, then the visual layer: typography, spacing, and a direction that fits the brief.</p>
       </article>
       <article class="phase">
-        <span class="phase-index">03</span>
+        <span class="phase-tag">03 &middot; BUILD</span>
         <h3>Build</h3>
-        <p class="phase-steps">Development &middot; SEO Optimization</p>
         <p>Clean, semantic code, written to be indexed correctly and maintained without a rebuild.</p>
       </article>
       <article class="phase">
-        <span class="phase-index">04</span>
+        <span class="phase-tag">04 &middot; SHIP</span>
         <h3>Ship</h3>
-        <p class="phase-steps">Testing &middot; Deployment &middot; Improvement</p>
         <p>Responsive checks, path fixes, and a site that gets revisited after launch instead of abandoned.</p>
       </article>
     </div>
@@ -462,7 +457,7 @@
 </section>
 
 <!-- ================= RECORD ================= -->
-<section class="section" id="record" data-sheet="05" data-label="Record">
+<section class="section band" id="record" data-section-label="Record">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Record</span>
@@ -479,7 +474,7 @@
         </div>
       </div>
       <div class="record-row">
-        <time class="record-date">2025-2026</time>
+        <time class="record-date">2025&ndash;2026</time>
         <div class="record-body">
           <h3>Lead Developer, Socials By John</h3>
           <p>Digital, creative, and technical work across client projects: troubleshooting, coordination, and the actual building.</p>
@@ -493,40 +488,24 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ================= TOOLKIT ================= -->
-<section class="section band" id="toolkit" data-sheet="06" data-label="Toolkit">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Toolkit</span>
-      <h2>What's actually in use.</h2>
-    </div>
 
     <div class="toolkit-grid">
       <div class="toolkit-col">
-        <h4>Languages &amp; Build</h4>
+        <h4>Apps &amp; Systems</h4>
         <div class="chip-row">
-          <span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">JavaScript</span><span class="chip">PHP</span><span class="chip">MySQL</span><span class="chip">Git</span><span class="chip">GitHub</span>
+          <span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Supabase</span><span class="chip">PostgreSQL</span><span class="chip">PHP</span><span class="chip">MySQL</span>
         </div>
       </div>
       <div class="toolkit-col">
-        <h4>Platforms</h4>
+        <h4>Web &amp; Platforms</h4>
         <div class="chip-row">
-          <span class="chip">WordPress</span><span class="chip">Elementor</span><span class="chip">Webflow</span><span class="chip">Shopify</span><span class="chip">Wix</span><span class="chip">GoHighLevel</span>
+          <span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">JavaScript</span><span class="chip">WordPress</span><span class="chip">Webflow</span><span class="chip">Shopify</span>
         </div>
       </div>
       <div class="toolkit-col">
         <h4>Design &amp; Coordination</h4>
         <div class="chip-row">
-          <span class="chip">Figma</span><span class="chip">Photoshop</span><span class="chip">Canva</span><span class="chip">Google Analytics</span>
-        </div>
-      </div>
-      <div class="toolkit-col">
-        <h4>Applied Daily</h4>
-        <div class="chip-row">
-          <span class="chip">ChatGPT</span><span class="chip">Claude</span><span class="chip">Copilot</span>
+          <span class="chip">Figma</span><span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">Google Analytics</span>
         </div>
       </div>
     </div>
@@ -534,7 +513,7 @@
 </section>
 
 <!-- ================= CONTACT ================= -->
-<section class="section contact-section" id="contact" data-sheet="07" data-label="Contact">
+<section class="section contact-section" id="contact" data-section-label="Contact">
   <div class="wrap contact-grid">
     <div class="contact-copy">
       <span class="eyebrow">Contact</span>
@@ -555,8 +534,8 @@
         <div class="form-field">
           <label for="project">Project type</label>
           <select id="project" name="project">
+            <option>Flutter / Supabase system</option>
             <option>Business website</option>
-            <option>UI/UX redesign</option>
             <option>PHP/MySQL system</option>
             <option>Platform build (Webflow, Shopify, WordPress)</option>
             <option>Something else</option>
@@ -578,11 +557,6 @@
         <div><dt>Resume</dt><dd><a href="./assets/JSarmiento_RESUME.pdf" target="_blank" rel="noopener">Open the PDF</a></dd></div>
       </dl>
       <p class="response-note">Most messages get a reply within a day or two. If it's urgent, say so in the message.</p>
-
-      <div class="title-block">
-        <p class="title-block-name">Prepared by Jeoffrey Sherren Sarmiento</p>
-        <p class="title-block-meta">Full-Stack Web Developer &middot; Sheet 07/07 &middot; Rev. 2026</p>
-      </div>
     </div>
   </div>
 </section>
@@ -591,8 +565,8 @@
 
 <footer class="site-footer">
   <div class="wrap footer-inner">
-    <span class="mark-initials">J·S</span>
-    <p>&copy; 2026 Jeoffrey Sherren Sarmiento. </p>
+    <span class="mark-initials">J&middot;S</span>
+    <p>&copy; 2026 Jeoffrey Sherren Sarmiento.</p>
     <a href="#opening" class="back-to-top">Back to top &uarr;</a>
   </div>
 </footer>
@@ -602,7 +576,6 @@
   <div class="cs-modal" role="dialog" aria-modal="true" aria-labelledby="csModalTitle" id="csModal">
     <div class="cs-modal-head">
       <div class="cs-modal-head-copy">
-        <div class="cs-modal-badges" id="csModalBadges"></div>
         <h3 id="csModalTitle"></h3>
         <p class="cs-modal-category" id="csModalCategory"></p>
       </div>

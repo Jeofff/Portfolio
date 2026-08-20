@@ -132,6 +132,17 @@ var PROJECTS_DATA = {
     highlights: ["Tutorial and quest mode", "Carving, painting, and kiln stages", "Grading and feedback system"],
     liveUrl: "",
     sourceUrl: ""
+  },
+
+  "pawcare-pro": {
+    overview: "PawCare Pro is a full clinic management system for veterinary practices, built in Flutter and Supabase: medical records, point-of-sale billing, inventory, confinement and boarding, a client-facing portal, and role-based access for admin, vet, and reception staff.",
+    challenge: "A vet clinic runs on paper charts, a separate cash log, and word of mouth for who's actually in the building. Nothing connects, nothing is backed up, and nothing a client can check themselves. The goal was one system that covers the whole clinic day, not a single dashboard with sample data.",
+    solution: "Built module by module against how a real clinic actually runs: SOAP-format medical records with vaccine due-date tracking, a genuine point-of-sale layer with store credit and split payments, confinement tracking for boarded patients, and a client portal so pet owners can see their own records and balance. Every permission boundary is enforced twice, in the app and independently at the database level, and every edit or deletion across the system is captured automatically in an audit log, not something any screen has to remember to record.",
+    role: "Freelance: architecture, backend, and full-stack development",
+    duration: "In progress, shipped module by module",
+    highlights: ["Role-based access for admin, vet, and reception, enforced at the database level", "Real point-of-sale billing with store credit and split payments", "Automatic vaccine due-date tracking with email and SMS reminders", "Offline-first: core records stay usable without a connection"],
+    liveUrl: "",
+    sourceUrl: ""
   }
 
 };
