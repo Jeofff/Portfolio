@@ -139,7 +139,16 @@ var PROJECTS_DATA = {
     challenge: "A vet clinic runs on paper charts, a separate cash log, and word of mouth for who's actually in the building. Nothing connects, nothing is backed up, and nothing a client can check themselves. The goal was one system that covers the whole clinic day, not a single dashboard with sample data.",
     solution: "Built module by module against how a real clinic actually runs: SOAP-format medical records with vaccine due-date tracking, a genuine point-of-sale layer with store credit and split payments, confinement tracking for boarded patients, and a client portal so pet owners can see their own records and balance. Every permission boundary is enforced twice, in the app and independently at the database level, and every edit or deletion across the system is captured automatically in an audit log, not something any screen has to remember to record.",
     role: "Freelance: architecture, backend, and full-stack development",
-    duration: "In progress, shipped module by module",
+    duration: "Shipped, built module by module",
+    gallery: [
+      { src: "./assets/pawcare/pawcare-dashboard.jpg", caption: "Dashboard: what needs attention today, not a wall of charts nobody reads." },
+      { src: "./assets/pawcare/pawcare-patients.jpg", caption: "Patient records tied to owners, with fast owner lookup during intake." },
+      { src: "./assets/pawcare/pawcare-billing.jpg", caption: "Real point-of-sale billing: services, inventory, and packages itemized on one charge." },
+      { src: "./assets/pawcare/pawcare-permissions.jpg", caption: "Generated live from the app's own permission logic, so it can't drift out of date." },
+      { src: "./assets/pawcare/pawcare-auditlog.jpg", caption: "Every edit or deletion logged automatically: who, what, and when." },
+      { src: "./assets/pawcare/pawcare-examrecord.jpg", caption: "Records print to a clinic-branded physical exam form." },
+      { src: "./assets/pawcare/pawcare-clientportal.jpg", caption: "Client portal: balance, downpayments, and Lalamove delivery status in one place." }
+    ],
     highlights: ["Role-based access for admin, vet, and reception, enforced at the database level", "Real point-of-sale billing with store credit and split payments", "Automatic vaccine due-date tracking with email and SMS reminders", "Offline-first: core records stay usable without a connection"],
     liveUrl: "",
     sourceUrl: ""

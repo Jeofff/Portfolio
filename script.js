@@ -4,11 +4,11 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ============================================================
-     Payroll calculator — the signature element.
+     Payroll calculator, the signature element.
      Figures below are drawn from the 2026 SSS, PhilHealth, Pag-IBIG,
      and BIR (TRAIN Law) schedules, current as of this build. This is
      a portfolio demonstration of real compliance math, not a
-     certified payroll product — brackets simplify slightly where the
+     certified payroll product, brackets simplify slightly where the
      official tables step in fine increments, but the rates, floors,
      ceilings, and splits are the real ones.
      ============================================================ */
@@ -199,8 +199,28 @@
       })
       .join("");
 
+    var galleryHtml = "";
+    if (data.gallery && data.gallery.length) {
+      galleryHtml =
+        '<div class="cs-block cs-gallery-block"><h4>Screens</h4><div class="cs-gallery">' +
+        data.gallery
+          .map(function (g) {
+            return (
+              '<figure class="cs-gallery-item">' +
+              '<a href="' + g.src + '" target="_blank" rel="noopener">' +
+              '<img src="' + g.src + '" alt="' + g.caption + '" loading="lazy">' +
+              "</a>" +
+              '<figcaption>' + g.caption + "</figcaption>" +
+              "</figure>"
+            );
+          })
+          .join("") +
+        "</div></div>";
+    }
+
     modalBody.innerHTML =
       '<div class="cs-block"><h4>Overview</h4><p>' + data.overview + "</p></div>" +
+      galleryHtml +
       '<div class="cs-block"><h4>The problem</h4><p>' + data.challenge + "</p></div>" +
       '<div class="cs-block"><h4>What I built</h4><p>' + data.solution + "</p></div>" +
       '<div class="cs-meta-row">' +
