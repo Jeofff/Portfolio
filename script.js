@@ -2,139 +2,17 @@
   "use strict";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var canAnimate = !reduceMotion;
+  /* Cursor-driven effects (glow, magnetic pull, tilt) only make sense with a
+     real pointer, and must sit out under reduced-motion. */
+  var cursorFX = finePointer && !reduceMotion;
 
   /* ============================================================
-     Payroll calculator, the signature element.
-     Figures below are drawn from the 2026 SSS, PhilHealth, Pag-IBIG,
-     and BIR (TRAIN Law) schedules, current as of this build. This is
-     a portfolio demonstration of real compliance math, not a
-     certified payroll product, brackets simplify slightly where the
-     official tables step in fine increments, but the rates, floors,
-     ceilings, and splits are the real ones.
+     Floating dock: mobile toggle
      ============================================================ */
-
-  function computeSSS(salary) {
-    // 15% of Monthly Salary Credit, floor 5,000, ceiling 35,000,
-    // MSC approximated to the nearest 500 to mirror the official
-    // bracket steps without reproducing all ~60 rows.
-    var msc = Math.min(Math.max(Math.round(salary / 500) * 500, 5000), 35000);
-    var employee = msc * 0.05;
-    var ec = msc < 15000 ? 10 : 30;
-    var employer = msc * 0.10 + ec;
-    return { employee: employee, employer: employer, basis: msc, label: "SSS" };
-  }
-
-  function computePhilHealth(salary) {
-    // 5% of monthly basic salary, split evenly, floor 10,000 (₱500
-    // total), ceiling 100,000 (₱5,000 total).
-    var basis = Math.min(Math.max(salary, 10000), 100000);
-    var total = basis * 0.05;
-    return { employee: total / 2, employer: total / 2, basis: basis, label: "PhilHealth" };
-  }
-
-  function computePagIbig(salary) {
-    // 2%/2% up to a ₱10,000 salary cap (max ₱200 each). Employees
-    // earning ₱1,500 or below pay 1% instead; the employer share
-    // stays at 2% either way.
-    var basis = Math.min(salary, 10000);
-    var employeeRate = salary <= 1500 ? 0.01 : 0.02;
-    return { employee: basis * employeeRate, employer: basis * 0.02, basis: basis, label: "Pag-IBIG" };
-  }
-
-  function computeWithholdingTax(taxableMonthly) {
-    // TRAIN Law (RA 10963) brackets, effective 2023 onward and still
-    // current for 2026, expressed at their monthly equivalent
-    // (annual threshold and fixed amount both / 12).
-    var t = taxableMonthly;
-    if (t <= 20833.33) return 0;
-    if (t <= 33333.33) return (t - 20833.33) * 0.15;
-    if (t <= 66666.67) return 1875.00 + (t - 33333.33) * 0.20;
-    if (t <= 166666.67) return 8541.67 + (t - 66666.67) * 0.25;
-    if (t <= 666666.67) return 33541.67 + (t - 166666.67) * 0.30;
-    return 183541.67 + (t - 666666.67) * 0.35;
-  }
-
-  function peso(n) {
-    return "\u20b1" + n.toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-
-  function runCalculator() {
-    var input = document.getElementById("calcSalary");
-    var out = document.getElementById("calcResults");
-    if (!input || !out) return;
-
-    var raw = parseFloat(input.value.replace(/,/g, ""));
-    if (isNaN(raw) || raw <= 0) {
-      out.innerHTML = '<p class="calc-empty">Enter a monthly salary to see the breakdown.</p>';
-      out.classList.remove("is-computed");
-      return;
-    }
-
-    var sss = computeSSS(raw);
-    var philhealth = computePhilHealth(raw);
-    var pagibig = computePagIbig(raw);
-    var totalEeDeductions = sss.employee + philhealth.employee + pagibig.employee;
-    var taxable = Math.max(raw - totalEeDeductions, 0);
-    var tax = computeWithholdingTax(taxable);
-    var netPay = raw - totalEeDeductions - tax;
-
-    var rows = [
-      { label: "SSS", basis: sss.basis, amount: sss.employee },
-      { label: "PhilHealth", basis: philhealth.basis, amount: philhealth.employee },
-      { label: "Pag-IBIG", basis: pagibig.basis, amount: pagibig.employee },
-      { label: "Withholding tax", basis: taxable, amount: tax }
-    ];
-
-    var rowsHtml = rows.map(function (r) {
-      return (
-        '<div class="calc-row">' +
-        '<span class="calc-row-label">' + r.label + '</span>' +
-        '<span class="calc-row-amount">\u2212' + peso(r.amount) + "</span>" +
-        "</div>"
-      );
-    }).join("");
-
-    out.innerHTML =
-      rowsHtml +
-      '<div class="calc-row calc-row-total">' +
-      '<span class="calc-row-label">Net pay</span>' +
-      '<span class="calc-row-amount calc-net">' + peso(netPay) + "</span>" +
-      "</div>" +
-      '<p class="calc-footnote">Employer also pays ' + peso(sss.employer + philhealth.employer + pagibig.employer) +
-      " in matching SSS, PhilHealth, and Pag-IBIG contributions on top of this, not deducted from the employee.</p>";
-
-    out.classList.add("is-computed");
-  }
-
-  var calcInput = document.getElementById("calcSalary");
-  if (calcInput) {
-    calcInput.addEventListener("input", runCalculator);
-    runCalculator();
-  }
-
-  var calcPresets = document.querySelectorAll("[data-preset-salary]");
-  calcPresets.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      if (calcInput) {
-        calcInput.value = btn.getAttribute("data-preset-salary");
-        runCalculator();
-        calcInput.focus();
-      }
-    });
-  });
-
-  /* ============================================================
-     Top bar + mobile nav
-     ============================================================ */
-  var topbar = document.getElementById("topbar");
   var navToggle = document.getElementById("navToggle");
   var siteNav = document.getElementById("siteNav");
-
-  function onScroll() {
-    if (topbar) topbar.classList.toggle("is-scrolled", window.scrollY > 8);
-  }
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
 
   if (navToggle && siteNav) {
     navToggle.addEventListener("click", function () {
@@ -142,7 +20,7 @@
       navToggle.setAttribute("aria-expanded", open ? "true" : "false");
     });
     siteNav.addEventListener("click", function (e) {
-      if (e.target.tagName === "A") {
+      if (e.target.closest("a")) {
         siteNav.classList.remove("is-open");
         navToggle.setAttribute("aria-expanded", "false");
       }
@@ -150,7 +28,7 @@
   }
 
   /* ============================================================
-     Scroll-spy for nav underline
+     Scroll-spy: fills the brass circle behind the in-view dock icon
      ============================================================ */
   var sections = Array.prototype.slice.call(document.querySelectorAll("main .section"));
   var navLinks = Array.prototype.slice.call(document.querySelectorAll("[data-nav]"));
@@ -167,7 +45,7 @@
           }
         });
       },
-      { threshold: [0.3, 0.6], rootMargin: "-72px 0px -40% 0px" }
+      { threshold: [0.3, 0.6], rootMargin: "-10% 0px -45% 0px" }
     );
     sections.forEach(function (s) {
       spy.observe(s);
@@ -231,10 +109,10 @@
 
     var actionsHtml = "";
     if (data.liveUrl) {
-      actionsHtml += '<a class="btn btn-accent" href="' + data.liveUrl + '" target="_blank" rel="noopener">View live site \u2197</a>';
+      actionsHtml += '<a class="btn btn-accent" href="' + data.liveUrl + '" target="_blank" rel="noopener">View live site ↗</a>';
     }
     if (data.sourceUrl) {
-      actionsHtml += '<a class="btn btn-ghost" href="' + data.sourceUrl + '" target="_blank" rel="noopener">View source \u2197</a>';
+      actionsHtml += '<a class="btn btn-ghost" href="' + data.sourceUrl + '" target="_blank" rel="noopener">View source ↗</a>';
     }
     modalActions.innerHTML = actionsHtml;
 
@@ -285,6 +163,336 @@
   if (overlay) {
     overlay.addEventListener("click", function (e) {
       if (e.target === overlay) closeCaseStudy();
+    });
+  }
+
+  /* ============================================================
+     Effect 1: parallax on the oversized opening headline.
+     Drifts a fraction of scroll distance, so it lags the foreground.
+     ============================================================ */
+  var backdrop = document.querySelector(".opening-backdrop");
+  if (backdrop && canAnimate) {
+    var ticking = false;
+    var onParallax = function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        var y = window.scrollY * 0.12;
+        backdrop.style.transform = "translate(-50%, calc(-50% + " + y.toFixed(1) + "px))";
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", onParallax, { passive: true });
+    onParallax();
+  }
+
+  /* ============================================================
+     Effect 7: scroll-reveal stagger. One pass per section, ~70ms
+     between siblings. Base state is visible; only opt in when we can
+     actually animate, so no-JS / reduced-motion keep everything shown.
+     ============================================================ */
+  if (canAnimate && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("js-anim");
+
+    var revealGroups = [
+      ".opening-copy > *", ".opening-proof > *",
+      "#work .section-head > *", ".work-group-label", ".work-feature", ".work-card",
+      "#capability .section-head > *", ".spec-row",
+      "#process .section-head > *", ".phase",
+      "#record .section-head > *", ".record-row", ".toolkit-col",
+      "#contact .section-head > *", ".contact-form", ".contact-block > *"
+    ];
+
+    var revEls = [];
+    revealGroups.forEach(function (sel) {
+      Array.prototype.slice.call(document.querySelectorAll(sel)).forEach(function (el, i) {
+        el.classList.add("reveal");
+        el.style.transitionDelay = (Math.min(i, 6) * 0.07).toFixed(2) + "s";
+        revEls.push(el);
+      });
+    });
+
+    var revObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            revObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.01, rootMargin: "0px 0px -8% 0px" }
+    );
+    revEls.forEach(function (el) {
+      revObserver.observe(el);
+    });
+  }
+
+  /* ============================================================
+     Effect 7: animated stat counters. Count up once from 0 on view.
+     ============================================================ */
+  var counters = Array.prototype.slice.call(document.querySelectorAll("[data-count]"));
+  if (counters.length && "IntersectionObserver" in window) {
+    var countObs = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var el = entry.target;
+          countObs.unobserve(el);
+          var target = parseFloat(el.getAttribute("data-count")) || 0;
+          if (reduceMotion) {
+            el.textContent = String(target);
+            return;
+          }
+          var dur = 800;
+          var start = null;
+          var step = function (ts) {
+            if (!start) start = ts;
+            var p = Math.min((ts - start) / dur, 1);
+            var eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = String(Math.round(target * eased));
+            if (p < 1) requestAnimationFrame(step);
+            else el.textContent = String(target);
+          };
+          requestAnimationFrame(step);
+        });
+      },
+      { threshold: 0.6 }
+    );
+    counters.forEach(function (el) {
+      countObs.observe(el);
+    });
+  }
+
+  /* ============================================================
+     Effect 7: cursor-reactive glow on dark sections.
+     A .section-glow layer is injected (decorative); its gradient
+     centre follows the pointer through --x / --y custom properties.
+     ============================================================ */
+  var darkSections = Array.prototype.slice.call(document.querySelectorAll(".section--dark"));
+  darkSections.forEach(function (sec) {
+    var glow = document.createElement("div");
+    glow.className = "section-glow";
+    glow.setAttribute("aria-hidden", "true");
+    sec.insertBefore(glow, sec.firstChild);
+
+    if (!cursorFX) return;
+    sec.addEventListener("mousemove", function (e) {
+      var r = sec.getBoundingClientRect();
+      sec.style.setProperty("--x", (e.clientX - r.left) + "px");
+      sec.style.setProperty("--y", (e.clientY - r.top) + "px");
+      sec.classList.add("is-glowing");
+    });
+    sec.addEventListener("mouseleave", function () {
+      sec.classList.remove("is-glowing");
+    });
+  });
+
+  /* ============================================================
+     Effect 7: magnetic pull on the accent buttons and dock icons.
+     A few px of travel toward the cursor, CSS transition springs back.
+     ============================================================ */
+  if (cursorFX) {
+    var magnets = Array.prototype.slice.call(
+      document.querySelectorAll(".btn-accent, .site-nav a .dock-ico")
+    );
+    magnets.forEach(function (el) {
+      var host = el.classList.contains("dock-ico") ? el.parentNode : el;
+      host.addEventListener("mousemove", function (e) {
+        var r = el.getBoundingClientRect();
+        var mx = e.clientX - (r.left + r.width / 2);
+        var my = e.clientY - (r.top + r.height / 2);
+        el.style.transform = "translate(" + (mx * 0.25).toFixed(1) + "px, " + (my * 0.25).toFixed(1) + "px)";
+      });
+      host.addEventListener("mouseleave", function () {
+        el.style.transform = "";
+      });
+    });
+  }
+
+  /* ============================================================
+     Effect 7: light 3D tilt on the work-feature and bento cards.
+     Capped at 5deg so it reads as polish, not a toy.
+     ============================================================ */
+  if (cursorFX) {
+    var tilters = Array.prototype.slice.call(
+      document.querySelectorAll(".work-feature, .toolkit-col")
+    );
+    var MAX_TILT = 5;
+    tilters.forEach(function (card) {
+      card.addEventListener("mousemove", function (e) {
+        var r = card.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform =
+          "perspective(800px) rotateX(" + (-py * MAX_TILT).toFixed(2) +
+          "deg) rotateY(" + (px * MAX_TILT).toFixed(2) + "deg)";
+      });
+      card.addEventListener("mouseleave", function () {
+        card.style.transform = "";
+      });
+    });
+  }
+
+  /* ============================================================
+     Contact form: Formspree submission with inline validation.
+
+     GitHub Pages is static hosting, so the form is delivered by
+     Formspree (free tier: 50 submissions / month). The <form> keeps
+     a mailto action purely as a no-JS fallback; when JS runs we
+     take over the submit here.
+
+     SETUP: create a form at https://formspree.io, then paste its
+     endpoint (https://formspree.io/f/xxxxxxxx) into FORMSPREE_ENDPOINT
+     below. Until that is done, submitting hands off to the visitor's
+     email client instead so the form still does something useful.
+     ============================================================ */
+  var contactForm = document.getElementById("contactForm");
+  if (contactForm) {
+    // TODO(jeoff): replace REPLACE_WITH_FORM_ID with your real Formspree form ID.
+    var FORMSPREE_ENDPOINT = "https://formspree.io/f/REPLACE_WITH_FORM_ID";
+    var CONTACT_EMAIL = "Jeoffreysherren01@gmail.com";
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // JS owns validation now, so switch off the browser's native bubbles.
+    // (If JS never runs, native `required` + the mailto action still apply.)
+    contactForm.setAttribute("novalidate", "");
+
+    var statusEl = document.getElementById("formStatus");
+    var submitBtn = contactForm.querySelector('button[type="submit"]');
+    var projectEl = document.getElementById("project");
+
+    var fields = {
+      name: { el: document.getElementById("name"), err: document.getElementById("err-name") },
+      email: { el: document.getElementById("email"), err: document.getElementById("err-email") },
+      message: { el: document.getElementById("message"), err: document.getElementById("err-message") }
+    };
+
+    function setFieldError(f, message) {
+      f.err.textContent = message;
+      f.el.setAttribute("aria-invalid", "true");
+    }
+    function clearFieldError(f) {
+      f.err.textContent = "";
+      f.el.removeAttribute("aria-invalid");
+    }
+    function setStatus(kind, html) {
+      statusEl.hidden = false;
+      statusEl.className = "form-status form-status--" + kind;
+      statusEl.innerHTML = html;
+    }
+    function clearStatus() {
+      statusEl.hidden = true;
+      statusEl.className = "form-status";
+      statusEl.textContent = "";
+    }
+
+    // Clear a field's error as soon as the visitor starts correcting it.
+    Object.keys(fields).forEach(function (key) {
+      fields[key].el.addEventListener("input", function () {
+        clearFieldError(fields[key]);
+      });
+    });
+
+    function validate() {
+      var firstInvalid = null;
+
+      if (!fields.name.el.value.trim()) {
+        setFieldError(fields.name, "Please enter your name.");
+        firstInvalid = firstInvalid || fields.name.el;
+      } else {
+        clearFieldError(fields.name);
+      }
+
+      var email = fields.email.el.value.trim();
+      if (!email) {
+        setFieldError(fields.email, "Please enter your email.");
+        firstInvalid = firstInvalid || fields.email.el;
+      } else if (!EMAIL_RE.test(email)) {
+        setFieldError(fields.email, "That doesn't look like a valid email address.");
+        firstInvalid = firstInvalid || fields.email.el;
+      } else {
+        clearFieldError(fields.email);
+      }
+
+      if (!fields.message.el.value.trim()) {
+        setFieldError(fields.message, "Please include a short message.");
+        firstInvalid = firstInvalid || fields.message.el;
+      } else {
+        clearFieldError(fields.message);
+      }
+
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return false;
+      }
+      return true;
+    }
+
+    // A pre-filled mailto, offered as a recovery link if the network send fails.
+    function mailtoHref() {
+      var subject = "Portfolio enquiry from " + (fields.name.el.value.trim() || "a visitor");
+      var body =
+        "Name: " + fields.name.el.value.trim() + "\n" +
+        "Email: " + fields.email.el.value.trim() + "\n" +
+        "Project type: " + projectEl.value + "\n\n" +
+        fields.message.el.value.trim();
+      return "mailto:" + CONTACT_EMAIL +
+        "?subject=" + encodeURIComponent(subject) +
+        "&body=" + encodeURIComponent(body);
+    }
+
+    function showFailure() {
+      setStatus(
+        "error",
+        "Something went wrong sending that. Please try again in a moment, or " +
+        '<a href="' + mailtoHref() + '">email it to me directly</a>.'
+      );
+    }
+
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearStatus();
+      if (!validate()) return;
+
+      // Endpoint not configured yet: fall back to the visitor's mail client.
+      if (FORMSPREE_ENDPOINT.indexOf("REPLACE_WITH_FORM_ID") !== -1) {
+        setStatus("notice", "Opening your email app so you can send this to me directly…");
+        window.location.href = mailtoHref();
+        return;
+      }
+
+      var originalLabel = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending…";
+
+      fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: new FormData(contactForm)
+      })
+        .then(function (res) {
+          if (res.ok) {
+            contactForm.reset();
+            setStatus(
+              "success",
+              "Thanks — your message is on its way. I'll reply within a day or two."
+            );
+            return;
+          }
+          return res.json().then(function (data) {
+            if (data && Array.isArray(data.errors) && data.errors.length) {
+              setStatus("error", data.errors.map(function (x) { return x.message; }).join(" "));
+            } else {
+              showFailure();
+            }
+          });
+        })
+        .catch(showFailure)
+        .finally(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+        });
     });
   }
 })();

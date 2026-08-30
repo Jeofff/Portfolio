@@ -6,15 +6,20 @@
    ========================================================================== */
 
 :root {
-  /* Palette */
-  --ledger: #EDEFE5;      /* base background, columnar-pad paper */
-  --ink: #161B18;         /* body text, dark surfaces */
-  --balance: #2F6B4F;     /* primary accent, "in the black" */
-  --balance-strong: #244F3B;
-  --deduction: #A63A2E;   /* secondary accent, deduction line items only */
-  --slate: #6B6F63;       /* secondary text, borders */
-  --slate-soft: #DADFD2;
-  --paper-white: #FFFFFF;
+  /* Palette - Ledger, "Brass & Parchment" */
+  --ledger: #F3ECDD;         /* warm parchment, base background */
+  --ink: #17130F;            /* near-black espresso, body text / dark surfaces */
+  --balance: #A9803F;        /* aged brass, primary accent */
+  --balance-strong: #82602C; /* deeper brass, hover / pressed states */
+  --deduction: #6E2A24;      /* oxblood, secondary accent, used sparingly */
+  --slate: #6E6454;          /* warm grey, secondary text / borders */
+  --slate-soft: #E6DCC3;     /* soft parchment, card borders / muted fills */
+  --paper-white: #FBF7EE;    /* warm off-white, card surfaces (not pure #FFF) */
+
+  /* Dark variant of Ledger (Effect 3) */
+  --ledger-dark: #100D09;    /* near-black espresso, warmer/darker than --ink */
+  --ink-inverse: #F3ECDD;    /* parchment text on dark */
+  --surface-dark: #1C1712;   /* raised card inside a dark section */
 
   /* Type */
   --font-display: 'Archivo Black', sans-serif;
@@ -24,16 +29,16 @@
   --radius: 3px;
   --wrap-width: 1180px;
   --topbar-height: 68px;
+  --dock-safe: 132px;        /* bottom clearance for the floating dock */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 /* Grid items default to min-width: auto, letting their own content
    (long text, a row of buttons or chips) force a track wider than
-   the grid actually has room for, this is what caused a real,
-   confirmed overflow bug in the calculator on mobile, and could
-   silently do the same in any other grid on this page. */
+   the grid actually has room for. Pinning min-width: 0 on grid/row
+   children stops that from silently causing horizontal overflow. */
 [class$="-grid"] > *, [class$="-row"] > * { min-width: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: var(--topbar-height); }
+html { scroll-behavior: smooth; scroll-padding-top: 32px; scroll-padding-bottom: var(--dock-safe); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
@@ -77,45 +82,69 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   padding: 12px 22px; border-radius: var(--radius);
   font-family: var(--font-body); font-weight: 600; font-size: 0.95rem;
   border: 1.5px solid transparent; cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+              transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.btn-accent { background: var(--balance); color: var(--paper-white); }
-.btn-accent:hover { background: var(--balance-strong); }
+/* Button fill-wipe on hover (Effect 7): a brass shade wipes in from the left
+   edge via a scaled ::before instead of an instant background swap. */
+.btn-accent { position: relative; overflow: hidden; z-index: 0; background: var(--balance); color: var(--paper-white); }
+.btn-accent::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--balance-strong); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-accent:hover::before { transform: scaleX(1); }
 .btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
 .btn-ghost:hover { background: var(--ink); color: var(--ledger); }
 
-/* ==================== Top bar ==================== */
+/* ==================== Floating pill dock nav (Effect 2) ==================== */
+/* Centred with flex rather than translateX(-50%): a transformed ancestor
+   would become the containing block for the position:fixed mobile menu. */
 .topbar {
-  position: sticky; top: 0; z-index: 200;
-  height: var(--topbar-height);
-  background: rgba(237, 239, 229, 0.88);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  position: fixed; left: 0; right: 0; bottom: 22px;
+  display: flex; justify-content: center;
+  z-index: 200; height: auto; background: transparent; border: 0;
+  pointer-events: none;
 }
-.topbar.is-scrolled { border-bottom-color: var(--slate-soft); background: rgba(237, 239, 229, 0.97); }
-.topbar-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.mark { display: flex; align-items: center; }
-.mark-initials { font-family: var(--font-mono); font-weight: 600; font-size: 1.1rem; letter-spacing: 0.02em; }
+.dock-shell { display: flex; align-items: center; gap: 12px; pointer-events: auto; }
 
-.site-nav { display: flex; gap: 28px; }
+.site-nav {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--ink); border-radius: 999px; padding: 10px 14px;
+  box-shadow: 0 16px 40px -14px rgba(23, 19, 15, 0.6), 0 2px 8px rgba(23, 19, 15, 0.22);
+}
 .site-nav a {
-  font-size: 0.92rem; font-weight: 500; color: var(--slate);
-  padding: 6px 0; border-bottom: 2px solid transparent;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  position: relative; display: flex; align-items: center; justify-content: center;
+  color: var(--paper-white); padding: 0; border: 0;
 }
-.site-nav a:hover, .site-nav a.is-active { color: var(--ink); border-bottom-color: var(--balance); }
-
-.topbar-actions { display: flex; align-items: center; gap: 14px; }
+.site-nav a:focus-visible { border-radius: 999px; }
+.dock-ico {
+  display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 999px; color: var(--paper-white);
+  transition: background-color 0.2s ease, color 0.2s ease,
+              transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.dock-ico svg { width: 20px; height: 20px; display: block; }
+.site-nav a:hover .dock-ico { background: rgba(251, 247, 238, 0.14); }
+.site-nav a.is-active .dock-ico { background: var(--balance); color: var(--ink); }
+.dock-label {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.dock-cta {
+  border-radius: 999px; padding: 13px 24px; white-space: nowrap;
+  box-shadow: 0 16px 40px -16px rgba(169, 128, 63, 0.75);
+}
 .nav-toggle {
-  display: none; width: 40px; height: 40px; border: 1px solid var(--slate-soft); border-radius: var(--radius);
-  background: transparent; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  display: none; width: 46px; height: 46px; border: 0; border-radius: 999px;
+  background: var(--ink); cursor: pointer;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  box-shadow: 0 16px 40px -14px rgba(23, 19, 15, 0.6);
 }
-.nav-toggle span { display: block; width: 18px; height: 2px; background: var(--ink); }
+.nav-toggle span { display: block; width: 18px; height: 2px; background: var(--paper-white); }
 
 /* ==================== Sections ==================== */
 .section { padding: 96px 0; }
-.section.band { background: var(--slate-soft); }
 .section-head { max-width: 640px; margin-bottom: 48px; }
 .eyebrow {
   display: inline-block; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
@@ -124,12 +153,23 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .section-intro { margin-top: 14px; color: var(--slate); font-size: 1.02rem; max-width: 560px; }
 
 /* ==================== Opening ==================== */
-.opening { padding-top: 72px; padding-bottom: 64px; }
+.opening { padding-top: 72px; padding-bottom: 64px; position: relative; overflow: hidden; }
+/* Effect 1: oversized layered headline, bleeds off both edges, sits behind
+   the foreground copy and drifts slower than it on scroll (parallax in JS). */
+.opening-backdrop {
+  position: absolute; left: 50%; top: 50%; margin: 0;
+  transform: translate(-50%, -50%);
+  z-index: 0; pointer-events: none; user-select: none;
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 22vw; line-height: 1; letter-spacing: -0.02em;
+  color: var(--slate-soft); white-space: nowrap; will-change: transform;
+}
+.opening .wrap { position: relative; z-index: 1; }
 .opening-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: start; }
 .locator { font-family: var(--font-mono); font-size: 0.85rem; color: var(--slate); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px; }
 .opening-head { font-size: clamp(2.2rem, 4.6vw, 3.6rem); margin-bottom: 22px; }
 .opening-lead { font-size: 1.1rem; color: var(--ink); max-width: 54ch; line-height: 1.6; margin-bottom: 32px; }
-.opening-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.opening-actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
 
 .opening-proof { display: flex; flex-direction: column; gap: 12px; }
 .proof-card {
@@ -206,67 +246,59 @@ a.proof-card:hover { border-color: var(--balance); transform: translateX(-2px); 
 .work-card-body .work-summary { font-size: 0.92rem; margin-top: 10px; }
 .work-card-body .chip-row { margin-top: auto; padding-top: 16px; }
 
-/* ==================== Calculator (signature element) ==================== */
-.calc-section { background: var(--ink); color: var(--ledger); }
-.calc-section .eyebrow { color: var(--balance); }
-.calc-section .section-intro { color: var(--slate-soft); }
-.calc-section h2 { color: var(--ledger); }
+/* ==================== Section theme flips (Effect 3) ==================== */
+.section--dark {
+  position: relative; overflow: hidden;
+  background: var(--ledger-dark); color: var(--ink-inverse);
+}
+.section--dark > .wrap { position: relative; z-index: 1; }
+.section--dark h2, .section--dark h3, .section--dark h4 { color: var(--ink-inverse); }
+.section--dark .eyebrow { color: var(--balance); }
+.section--dark .section-intro,
+.section--dark .spec-body p,
+.section--dark .record-body p { color: #C9BCA0; }
+.section--dark .spec-row,
+.section--dark .spec-row:first-child { border-color: #34291F; }
+.section--dark .spec-tags span {
+  background: var(--surface-dark); border-color: #3E3123; color: var(--ink-inverse);
+}
+.section--dark .record-date { color: var(--balance); }
+.section--dark .toolkit-grid { border-top-color: #34291F; }
 
-.calc-widget {
-  display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 0;
-  background: #0F1310; border: 1px solid #2A312B; border-radius: var(--radius); overflow: hidden;
+/* Cursor-reactive glow on dark sections (Effect 7). The gradient position is
+   driven by --x / --y custom properties set on mousemove, no full repaints. */
+.section-glow {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0; transition: opacity 0.35s ease;
+  background: radial-gradient(340px circle at var(--x, 50%) var(--y, 50%),
+              rgba(169, 128, 63, 0.16), rgba(169, 128, 63, 0) 70%);
 }
-/* Grid items default to min-width: auto, which lets their own
-   content (the preset buttons row, in this case) force the track
-   wider than the grid actually has room for. This is what caused the
-   salary input to overflow past the card's edge on mobile. */
-.calc-widget > * { min-width: 0; }
-.calc-input-block { padding: 32px; border-right: 1px solid #2A312B; }
-.calc-input-block label { display: block; font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--slate-soft); margin-bottom: 12px; }
-.calc-input-wrap {
-  display: flex; align-items: center; background: var(--ledger); border-radius: var(--radius);
-  padding: 4px 4px 4px 16px; border: 2px solid transparent;
-}
-.calc-input-wrap:focus-within { border-color: var(--balance); }
-.calc-peso-sign { font-family: var(--font-mono); font-size: 1.3rem; color: var(--ink); margin-right: 4px; }
-#calcSalary {
-  flex: 1; border: none; background: transparent; padding: 14px 8px; font-family: var(--font-mono);
-  font-size: 1.3rem; font-weight: 500; color: var(--ink); min-width: 0;
-}
-#calcSalary:focus { outline: none; }
-#calcSalary::placeholder { color: var(--slate); }
+.section--dark.is-glowing .section-glow { opacity: 1; }
 
-.calc-presets { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-.calc-presets button {
-  font-family: var(--font-mono); font-size: 0.8rem; padding: 7px 12px; border-radius: var(--radius);
-  background: transparent; border: 1px solid #3A423B; color: var(--slate-soft); cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+/* ==================== Recurring circular arrow accent (Effect 6) ==================== */
+.badge-arrow {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 46px; height: 46px; border-radius: 999px;
+  border: 1px solid var(--slate); color: var(--ink); background: transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
-.calc-presets button:hover { border-color: var(--balance); color: var(--ledger); }
-.calc-hint { margin-top: 18px; font-size: 0.82rem; color: var(--slate-soft); line-height: 1.5; }
+.badge-arrow svg { width: 20px; height: 20px; display: block; }
+.badge-arrow:hover { border-color: var(--balance); color: var(--balance-strong); }
 
-.calc-results { padding: 32px; display: flex; flex-direction: column; justify-content: center; }
-.calc-empty { color: var(--slate-soft); font-size: 0.95rem; }
-.calc-results.is-computed .calc-row { animation: calc-row-in 0.32s ease both; }
-.calc-results.is-computed .calc-row:nth-child(2) { animation-delay: 0.04s; }
-.calc-results.is-computed .calc-row:nth-child(3) { animation-delay: 0.08s; }
-.calc-results.is-computed .calc-row:nth-child(4) { animation-delay: 0.12s; }
-.calc-results.is-computed .calc-row-total { animation-delay: 0.16s; }
-@keyframes calc-row-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ==================== Scroll-reveal stagger (Effect 7) ==================== */
+.js-anim .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+.js-anim .reveal.is-in { opacity: 1; transform: none; }
+
+/* ==================== Card tilt (Effect 7) ==================== */
+.work-feature, .toolkit-col { transition: transform 0.2s ease, border-color 0.15s ease, box-shadow 0.15s ease; }
+
+/* ==================== Motion / no-cursor fallbacks ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .opening-backdrop { transform: translate(-50%, -50%) !important; }
+  .btn-accent::before { display: none; }
+  .btn-accent:hover { background: var(--balance-strong); }
+  .section-glow { display: none; }
 }
-.calc-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 12px 0; border-bottom: 1px solid #2A312B;
-  font-family: var(--font-mono);
-}
-.calc-row-label { font-size: 0.9rem; color: var(--slate-soft); }
-.calc-row-amount { font-size: 1.05rem; font-variant-numeric: tabular-nums; color: var(--deduction); }
-.calc-row-total { border-bottom: none; padding-top: 18px; margin-top: 4px; border-top: 2px solid var(--balance); }
-.calc-row-total .calc-row-label { font-size: 1rem; color: var(--ledger); font-weight: 600; }
-.calc-net { color: var(--balance); font-size: 1.35rem; font-weight: 600; }
-.calc-footnote { margin-top: 18px; font-size: 0.78rem; color: var(--slate-soft); line-height: 1.5; }
 
 /* ==================== Capability ==================== */
 .spec-list { display: flex; flex-direction: column; gap: 0; }
@@ -292,10 +324,17 @@ a.proof-card:hover { border-color: var(--balance); transform: translateX(-2px); 
 .record-date { font-family: var(--font-mono); font-size: 0.85rem; color: var(--balance-strong); padding-top: 4px; }
 .record-body p { margin-top: 8px; color: var(--slate); max-width: 60ch; }
 
-.toolkit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding-top: 40px; border-top: 1px solid var(--slate-soft); }
-.toolkit-col h4 { font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--slate); margin-bottom: 14px; }
-.toolkit-col .chip-row { margin-top: 0; }
-.toolkit-col .chip { background: var(--paper-white); }
+/* Rounded bento skill cards (Effect 4): icon/chip row grouped above the
+   heading, equal height from the grid, dark surface to match Effect 3. */
+.toolkit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding-top: 40px; border-top: 1px solid var(--slate-soft); }
+.toolkit-col {
+  display: flex; flex-direction: column; gap: 16px;
+  background: var(--surface-dark); border: 1px solid #3E3123;
+  border-radius: 20px; padding: 28px;
+}
+.toolkit-col h4 { font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-inverse); margin: 0; }
+.toolkit-col .chip-row { margin: 0; }
+.toolkit-col .chip { background: rgba(243, 236, 221, 0.05); border-color: #4A3B2C; color: #D8CBB0; }
 
 /* ==================== Contact ==================== */
 .contact-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 56px; }
@@ -310,6 +349,27 @@ a.proof-card:hover { border-color: var(--balance); transform: translateX(-2px); 
 .form-field textarea { min-height: 120px; resize: vertical; }
 .contact-form button { margin-top: 8px; align-self: flex-start; }
 
+/* Off-screen honeypot: present for bots, invisible and skipped for people. */
+.form-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Inline per-field validation messages (oxblood = the palette's "deduction"
+   / negative accent). Empty span collapses so it never adds stray spacing. */
+.field-error { font-family: var(--font-mono); font-size: 0.78rem; color: var(--deduction); }
+.field-error:empty { display: none; }
+.form-field input[aria-invalid="true"],
+.form-field textarea[aria-invalid="true"] { border-color: var(--deduction); }
+
+/* Submit outcome banner (success / failure / notice). */
+.form-status {
+  margin: 4px 0 0; padding: 12px 14px; border-radius: var(--radius);
+  font-size: 0.9rem; line-height: 1.5; border: 1px solid var(--slate-soft);
+}
+.form-status[hidden] { display: none; }
+.form-status a { color: inherit; text-decoration: underline; }
+.form-status--success { border-color: var(--balance); color: var(--balance-strong); background: rgba(169, 128, 63, 0.08); }
+.form-status--error { border-color: var(--deduction); color: var(--deduction); background: rgba(110, 42, 36, 0.06); }
+.form-status--notice { border-color: var(--slate); color: var(--slate); }
+
 .contact-block { padding-top: 8px; }
 .contact-info { display: flex; flex-direction: column; gap: 16px; margin: 0; }
 .contact-info dt { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--slate); }
@@ -317,12 +377,33 @@ a.proof-card:hover { border-color: var(--balance); transform: translateX(-2px); 
 .contact-info a:hover { color: var(--balance-strong); }
 .response-note { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--slate-soft); color: var(--slate); font-size: 0.88rem; }
 
-/* ==================== Footer ==================== */
-.site-footer { border-top: 1px solid var(--slate-soft); padding: 28px 0; }
-.footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.footer-inner p { color: var(--slate); font-size: 0.85rem; }
-.back-to-top { font-size: 0.85rem; color: var(--slate); }
-.back-to-top:hover { color: var(--balance-strong); }
+/* ==================== Marquee footer band (Effect 5) ==================== */
+.site-footer { border: 0; padding: 0; }
+.footer-band { position: relative; overflow: hidden; padding: 44px 0 calc(40px + var(--dock-safe)); }
+.footer-band > *:not(.section-glow) { position: relative; z-index: 1; }
+.footer-tagline {
+  max-width: var(--wrap-width); margin: 0 auto; padding: 0 24px;
+  font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.03em; color: var(--slate-soft);
+}
+.footer-marquee {
+  margin: 10px 0 0; text-align: center;
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 15vw; line-height: 1.05; letter-spacing: -0.02em;
+  color: var(--ink-inverse); white-space: nowrap; overflow: hidden;
+}
+.footer-legal {
+  max-width: var(--wrap-width); margin: 20px auto 0; padding: 0 24px;
+  font-family: var(--font-mono); font-size: 0.74rem; color: var(--slate);
+}
+.site-footer .back-to-top {
+  position: absolute; top: 26px; right: 24px; z-index: 2;
+  width: 46px; height: 46px; border-radius: 999px;
+  border: 1px solid var(--slate-soft); color: var(--ink-inverse);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.site-footer .back-to-top svg { width: 18px; height: 18px; display: block; }
+.site-footer .back-to-top:hover { border-color: var(--balance); color: var(--balance); }
 
 /* ==================== Case study modal ==================== */
 .cs-modal-overlay {
@@ -364,19 +445,32 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 960px) {
   .opening-grid { grid-template-columns: 1fr; gap: 40px; }
   .work-card-list { grid-template-columns: repeat(2, 1fr); }
-  .calc-widget { grid-template-columns: 1fr; }
-  .calc-input-block { border-right: none; border-bottom: 1px solid #2A312B; }
   .phase-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
   .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-  .toolkit-grid { grid-template-columns: 1fr; gap: 28px; }
+  .toolkit-grid { grid-template-columns: 1fr; gap: 20px; }
 }
 
 @media (max-width: 720px) {
-  .site-nav { position: fixed; top: var(--topbar-height); left: 0; right: 0; background: var(--ledger); border-bottom: 1px solid var(--slate-soft); flex-direction: column; gap: 0; padding: 8px 24px 16px; transform: translateY(-8px); opacity: 0; pointer-events: none; transition: opacity 0.15s ease, transform 0.15s ease; }
+  /* Dock collapses to a single toggle pill; the section list opens above it. */
+  .topbar { bottom: 16px; }
+  .dock-shell { gap: 8px; }
+  .site-nav {
+    position: fixed; left: 16px; right: 16px; bottom: 72px;
+    flex-direction: column; align-items: stretch; gap: 2px;
+    border-radius: 18px; padding: 10px;
+    transform: translateY(10px); opacity: 0; pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+  }
   .site-nav.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .site-nav a { padding: 12px 0; border-bottom: 1px solid var(--slate-soft); }
+  .site-nav a { justify-content: flex-start; gap: 12px; padding: 8px 10px; }
+  .dock-ico { width: 34px; height: 34px; }
+  .dock-label {
+    position: static; width: auto; height: auto; margin: 0; clip: auto;
+    font-size: 0.95rem; font-weight: 600; color: var(--paper-white);
+  }
+  .dock-cta { display: none; }
   .nav-toggle { display: flex; }
-  .topbar-actions .btn-accent { display: none; }
+
   .work-card-list { grid-template-columns: 1fr; }
   .spec-row { grid-template-columns: 1fr; gap: 14px; }
   .phase-grid { grid-template-columns: 1fr; }
