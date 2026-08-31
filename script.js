@@ -2,14 +2,9 @@
   "use strict";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  var canAnimate = !reduceMotion;
-  /* Cursor-driven effects (glow, magnetic pull, tilt) only make sense with a
-     real pointer, and must sit out under reduced-motion. */
-  var cursorFX = finePointer && !reduceMotion;
 
   /* ============================================================
-     Floating dock: mobile toggle
+     Status ribbon: mobile nav toggle
      ============================================================ */
   var navToggle = document.getElementById("navToggle");
   var siteNav = document.getElementById("siteNav");
@@ -28,7 +23,7 @@
   }
 
   /* ============================================================
-     Scroll-spy: fills the brass circle behind the in-view dock icon
+     Scroll-spy: underlines the in-view section in the ribbon nav
      ============================================================ */
   var sections = Array.prototype.slice.call(document.querySelectorAll("main .section"));
   var navLinks = Array.prototype.slice.call(document.querySelectorAll("[data-nav]"));
@@ -37,7 +32,7 @@
     var spy = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.2) {
             var id = entry.target.id;
             navLinks.forEach(function (a) {
               a.classList.toggle("is-active", a.getAttribute("href") === "#" + id);
@@ -45,11 +40,45 @@
           }
         });
       },
-      { threshold: [0.3, 0.6], rootMargin: "-10% 0px -45% 0px" }
+      { threshold: [0.2, 0.5], rootMargin: "-15% 0px -60% 0px" }
     );
     sections.forEach(function (s) {
       spy.observe(s);
     });
+  }
+
+  /* ============================================================
+     Signature moment: the hero status board boots.
+     The rows fade in via CSS (see .js-boot in style.css); this only
+     swaps each row's status text from "booting" to its real value,
+     flips its dot from amber to green, and pings it once. Skipped
+     entirely under reduced motion, where the board is shown settled.
+     ============================================================ */
+  function pingDot(dot) {
+    if (!dot || reduceMotion) return;
+    dot.classList.remove("is-pinged");
+    void dot.offsetWidth; // force reflow so the animation restarts
+    dot.classList.add("is-pinged");
+  }
+
+  var booting = !reduceMotion && document.documentElement.classList.contains("js-boot");
+  if (booting) {
+    var bootRows = Array.prototype.slice.call(document.querySelectorAll(".board-row[data-boot]"));
+    bootRows.forEach(function (row, i) {
+      var statusEl = row.querySelector(".svc-status");
+      var dot = row.querySelector(".dot");
+      var finalStatus = statusEl ? statusEl.textContent : "";
+      if (statusEl) statusEl.textContent = "booting";
+      if (dot) dot.classList.add("dot--build");
+      setTimeout(function () {
+        if (statusEl) statusEl.textContent = finalStatus;
+        if (dot) dot.classList.remove("dot--build");
+        pingDot(dot);
+      }, 300 + i * 150);
+    });
+    setTimeout(function () {
+      document.documentElement.classList.add("is-booted");
+    }, 300 + bootRows.length * 150 + 200);
   }
 
   /* ============================================================
@@ -109,10 +138,10 @@
 
     var actionsHtml = "";
     if (data.liveUrl) {
-      actionsHtml += '<a class="btn btn-accent" href="' + data.liveUrl + '" target="_blank" rel="noopener">View live site ↗</a>';
+      actionsHtml += '<a class="btn btn-primary" href="' + data.liveUrl + '" target="_blank" rel="noopener">View live site</a>';
     }
     if (data.sourceUrl) {
-      actionsHtml += '<a class="btn btn-ghost" href="' + data.sourceUrl + '" target="_blank" rel="noopener">View source ↗</a>';
+      actionsHtml += '<a class="btn btn-ghost" href="' + data.sourceUrl + '" target="_blank" rel="noopener">View source</a>';
     }
     modalActions.innerHTML = actionsHtml;
 
@@ -152,10 +181,11 @@
 
   document.querySelectorAll("[data-project]").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      var key = btn.getAttribute("data-project");
-      var titleEl = btn.querySelector("h3");
-      var catEl = btn.querySelector(".work-category");
-      openCaseStudy(key, titleEl ? titleEl.textContent : "", catEl ? catEl.textContent : "");
+      openCaseStudy(
+        btn.getAttribute("data-project"),
+        btn.getAttribute("data-title") || "",
+        btn.getAttribute("data-category") || ""
+      );
     });
   });
 
@@ -163,174 +193,6 @@
   if (overlay) {
     overlay.addEventListener("click", function (e) {
       if (e.target === overlay) closeCaseStudy();
-    });
-  }
-
-  /* ============================================================
-     Effect 1: parallax on the oversized opening headline.
-     Drifts a fraction of scroll distance, so it lags the foreground.
-     ============================================================ */
-  var backdrop = document.querySelector(".opening-backdrop");
-  if (backdrop && canAnimate) {
-    var ticking = false;
-    var onParallax = function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        var y = window.scrollY * 0.12;
-        backdrop.style.transform = "translate(-50%, calc(-50% + " + y.toFixed(1) + "px))";
-        ticking = false;
-      });
-    };
-    window.addEventListener("scroll", onParallax, { passive: true });
-    onParallax();
-  }
-
-  /* ============================================================
-     Effect 7: scroll-reveal stagger. One pass per section, ~70ms
-     between siblings. Base state is visible; only opt in when we can
-     actually animate, so no-JS / reduced-motion keep everything shown.
-     ============================================================ */
-  if (canAnimate && "IntersectionObserver" in window) {
-    document.documentElement.classList.add("js-anim");
-
-    var revealGroups = [
-      ".opening-copy > *", ".opening-proof > *",
-      "#work .section-head > *", ".work-group-label", ".work-feature", ".work-card",
-      "#capability .section-head > *", ".spec-row",
-      "#process .section-head > *", ".phase",
-      "#record .section-head > *", ".record-row", ".toolkit-col",
-      "#contact .section-head > *", ".contact-form", ".contact-block > *"
-    ];
-
-    var revEls = [];
-    revealGroups.forEach(function (sel) {
-      Array.prototype.slice.call(document.querySelectorAll(sel)).forEach(function (el, i) {
-        el.classList.add("reveal");
-        el.style.transitionDelay = (Math.min(i, 6) * 0.07).toFixed(2) + "s";
-        revEls.push(el);
-      });
-    });
-
-    var revObserver = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-in");
-            revObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.01, rootMargin: "0px 0px -8% 0px" }
-    );
-    revEls.forEach(function (el) {
-      revObserver.observe(el);
-    });
-  }
-
-  /* ============================================================
-     Effect 7: animated stat counters. Count up once from 0 on view.
-     ============================================================ */
-  var counters = Array.prototype.slice.call(document.querySelectorAll("[data-count]"));
-  if (counters.length && "IntersectionObserver" in window) {
-    var countObs = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          var el = entry.target;
-          countObs.unobserve(el);
-          var target = parseFloat(el.getAttribute("data-count")) || 0;
-          if (reduceMotion) {
-            el.textContent = String(target);
-            return;
-          }
-          var dur = 800;
-          var start = null;
-          var step = function (ts) {
-            if (!start) start = ts;
-            var p = Math.min((ts - start) / dur, 1);
-            var eased = 1 - Math.pow(1 - p, 3);
-            el.textContent = String(Math.round(target * eased));
-            if (p < 1) requestAnimationFrame(step);
-            else el.textContent = String(target);
-          };
-          requestAnimationFrame(step);
-        });
-      },
-      { threshold: 0.6 }
-    );
-    counters.forEach(function (el) {
-      countObs.observe(el);
-    });
-  }
-
-  /* ============================================================
-     Effect 7: cursor-reactive glow on dark sections.
-     A .section-glow layer is injected (decorative); its gradient
-     centre follows the pointer through --x / --y custom properties.
-     ============================================================ */
-  var darkSections = Array.prototype.slice.call(document.querySelectorAll(".section--dark"));
-  darkSections.forEach(function (sec) {
-    var glow = document.createElement("div");
-    glow.className = "section-glow";
-    glow.setAttribute("aria-hidden", "true");
-    sec.insertBefore(glow, sec.firstChild);
-
-    if (!cursorFX) return;
-    sec.addEventListener("mousemove", function (e) {
-      var r = sec.getBoundingClientRect();
-      sec.style.setProperty("--x", (e.clientX - r.left) + "px");
-      sec.style.setProperty("--y", (e.clientY - r.top) + "px");
-      sec.classList.add("is-glowing");
-    });
-    sec.addEventListener("mouseleave", function () {
-      sec.classList.remove("is-glowing");
-    });
-  });
-
-  /* ============================================================
-     Effect 7: magnetic pull on the accent buttons and dock icons.
-     A few px of travel toward the cursor, CSS transition springs back.
-     ============================================================ */
-  if (cursorFX) {
-    var magnets = Array.prototype.slice.call(
-      document.querySelectorAll(".btn-accent, .site-nav a .dock-ico")
-    );
-    magnets.forEach(function (el) {
-      var host = el.classList.contains("dock-ico") ? el.parentNode : el;
-      host.addEventListener("mousemove", function (e) {
-        var r = el.getBoundingClientRect();
-        var mx = e.clientX - (r.left + r.width / 2);
-        var my = e.clientY - (r.top + r.height / 2);
-        el.style.transform = "translate(" + (mx * 0.25).toFixed(1) + "px, " + (my * 0.25).toFixed(1) + "px)";
-      });
-      host.addEventListener("mouseleave", function () {
-        el.style.transform = "";
-      });
-    });
-  }
-
-  /* ============================================================
-     Effect 7: light 3D tilt on the work-feature and bento cards.
-     Capped at 5deg so it reads as polish, not a toy.
-     ============================================================ */
-  if (cursorFX) {
-    var tilters = Array.prototype.slice.call(
-      document.querySelectorAll(".work-feature, .toolkit-col")
-    );
-    var MAX_TILT = 5;
-    tilters.forEach(function (card) {
-      card.addEventListener("mousemove", function (e) {
-        var r = card.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        card.style.transform =
-          "perspective(800px) rotateX(" + (-py * MAX_TILT).toFixed(2) +
-          "deg) rotateY(" + (px * MAX_TILT).toFixed(2) + "deg)";
-      });
-      card.addEventListener("mouseleave", function () {
-        card.style.transform = "";
-      });
     });
   }
 
@@ -457,14 +319,14 @@
 
       // Endpoint not configured yet: fall back to the visitor's mail client.
       if (FORMSPREE_ENDPOINT.indexOf("REPLACE_WITH_FORM_ID") !== -1) {
-        setStatus("notice", "Opening your email app so you can send this to me directly…");
+        setStatus("notice", "Opening your email app so you can send this to me directly.");
         window.location.href = mailtoHref();
         return;
       }
 
       var originalLabel = submitBtn.textContent;
       submitBtn.disabled = true;
-      submitBtn.textContent = "Sending…";
+      submitBtn.textContent = "Sending";
 
       fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
@@ -476,7 +338,7 @@
             contactForm.reset();
             setStatus(
               "success",
-              "Thanks — your message is on its way. I'll reply within a day or two."
+              "Thanks. Your message is on its way, I'll reply within a day or two."
             );
             return;
           }
