@@ -235,7 +235,15 @@ button.link {
 
 /* ==================== Opening / hero ==================== */
 .opening { padding-top: clamp(44px, 7vw, 76px); padding-bottom: clamp(52px, 9vw, 84px); }
-.opening h1 { max-width: 22ch; margin-bottom: 22px; }
+/* The hero statement runs longer than a punchy headline, so it is set a step
+   down from the global h1 size: strong, but it does not swallow the viewport. */
+.opening h1 {
+  font-size: clamp(1.65rem, 4vw, 2.9rem);
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  max-width: 30ch;
+  margin-bottom: 20px;
+}
 .opening-lead {
   font-size: 1.15rem; color: var(--ink-dim);
   max-width: 60ch; line-height: 1.6; margin-bottom: 28px;
@@ -269,7 +277,7 @@ button.link {
 }
 .board-row .col-name {
   display: flex; align-items: center; gap: 10px;
-  font-family: var(--font-display); font-size: 0.95rem; color: var(--screen-text);
+  font-family: var(--font-display); font-weight: 600; font-size: 0.95rem; color: var(--screen-text);
 }
 .board-row .col-since,
 .board-row .col-target { color: var(--screen-text-dim); }
@@ -358,7 +366,7 @@ button.svc-table-row:hover .st-name { text-decoration: underline; text-underline
   text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.7rem;
 }
 .svc-table-head:hover { background: transparent; }
-.st-name { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 0.95rem; }
+.st-name { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 600; font-size: 0.95rem; }
 .st-type { color: var(--ink-dim); }
 .st-status { color: var(--live); }
 
@@ -546,6 +554,8 @@ body.modal-open { overflow: hidden; }
     font-size: 0.8rem;
     margin-top: 3px;
   }
+  .board-row .col-link { text-align: left; }
+  .svc-table-row .st-view { text-align: left; }
   .board-row .col-status::before { content: "status  "; color: var(--screen-text-dim); }
   .board-row .col-since::before  { content: "since   "; color: var(--screen-text-dim); }
   .board-row .col-target::before { content: "target  "; color: var(--screen-text-dim); }
